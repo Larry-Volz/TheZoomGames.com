@@ -9,17 +9,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Roboto:wght@500&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="chessStylesheet.css">
+
     <title>TheZOOMGames</title>
 </head>
 <body>
     <header>
         <div class="card bg-primary text-white">
-            <img src="images/Blurry-board-game_1600x500-min.jpg" class="card-img" alt="picture of woman being hypnotized"> 
+            <img src="images/Blurry-board-game_1600x500-min.jpg" class="card-img" alt="board game photo"> 
             <div class="card-img-overlay"> 
                 <div class="container">
-                    <div class="row bg-light justify-content-center border rounded-pill">
-                            <h5 class="card-title justify-content-center">
+                    <div class="bg-light justify-content-center border rounded-pill">
+                            <h5 class=" card-title justify-content-center">
                                 <span class="text-primary">T</span>
                                 <span class="text-warning">h</span>
                                 <span class="text-secondary">e</span> 
@@ -47,11 +49,113 @@
     <section>
         <div class="container">
             <div class="row">
-                <div class="col-sm-6 col-md-8 bg-light justify-content-around gamePanel">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque fugit corporis at impedit, pariatur consequuntur dolorem voluptatem ex aliquid! Temporibus nihil autem delectus, animi blanditiis cum aliquid! Expedita, reiciendis. Ipsam!
+                <div class="col-lg-7 bg-light justify-content-around gamePanel">
+                    <h2>Zoom Control Panel</h2>
+                    <img src="images/Zoom.logo.jpg" class="img-fluid" alt="Zoom Logo">
                 </div>
-                <div class="col-sm-6 col-md-4 bg-warning justify-content-around zoomPanel">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Porro, rerum doloremque enim esse maiores distinctio vitae modi mollitia placeat rem magni quo, optio id quas. Placeat nam doloremque optio dolorem.
+
+                <!-- ---------------------------- GAME PANEL ------------------------------------------------>
+                <div class="col-lg-5 bg-warning justify-content-around zoomPanel">
+
+
+                    <div class = "box">
+                        <h1>Despicable Chess</h1>
+                            <table class ="content">
+                                <thead><div id="position">&nbsp;</div></thead>
+                                <tr>
+                                    <td><div id = "a8" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "b8" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "c8" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "d8" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "e8" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "f8"  class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "g8" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "h8" class="darkSquares">&nbsp;</div></td>
+                                </tr>
+                         
+                                <tr>
+                                    <td><div id = "a7" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "b7" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "c7" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "d7" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "e7" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "f7" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "g7" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "h7" class="lightSquares">&nbsp;</div></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td><div id = "a6" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "b6" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "c6" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "d6" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "e6" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "f6"  class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "g6" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "h6" class="darkSquares">&nbsp;</div></td>
+                                </tr>
+                            
+                                <tr>
+                                    <td><div id = "a5" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "b5" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "c5" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "d5" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "e5" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "f5" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "g5" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "h5" class="lightSquares">&nbsp;</div></td>
+                                </tr>
+                         
+                                <tr>
+                                    <td><div id = "a4" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "b4" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "c4" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "d4" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "e4" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "f4"  class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "g4" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "h4" class="darkSquares">&nbsp;</div></td>
+                                </tr>
+                            
+                                <tr>
+                                    <td><div id = "a3" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "b3" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "c3" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "d3" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "e3" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "f3" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "g3" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "h3" class="lightSquares">&nbsp;</div></td>
+                                </tr>
+                           
+                                <tr>
+                                    <td><div id = "a2" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "b2" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "c2" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "d2" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "e2" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "f2"  class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "g2" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "h2" class="darkSquares">&nbsp;</div></td>
+                                </tr>
+                                <tr>
+                                    <td><div id = "a1" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "b1" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "c1" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "d1" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "e1" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "f1" class="lightSquares">&nbsp;</div></td>
+                                    <td><div id = "g1" class="darkSquares">&nbsp;</div></td>
+                                    <td><div id = "h1" class="lightSquares">&nbsp;</div></td>
+                                </tr>
+                            </table>
+                        </div>
+                          
+                            
+                            <script src = "chessLogic.js"></script>
+                            <script src = "api_logic.js"></script>
+
+
                 </div>
             </div>
         </div>
