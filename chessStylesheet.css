@@ -14,6 +14,11 @@ table {
     /* margin: 0; */
 }
 
+table.center { 
+    margin-left:auto;
+     margin-right:auto; 
+    }
+
 td, tr {
     /* margin: 0; */
     border-collapse: collapse;
