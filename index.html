@@ -16,9 +16,27 @@
 </head>
 <body>
     <header>
+
+        <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div class="navbar-nav">
+                <a class="nav-item nav-link mx-3 active" href="#">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link mx-3" href="#">Connect with Zoom</a>
+                <a class="nav-item nav-link mx-3" href="#">Pick a Game</a>
+                <!-- <a class="nav-item nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> -->
+              </div>
+            </div>
+          </nav>
+
+
         <div class="card bg-primary text-white">
             <img src="images/Blurry-board-game_1600x500-min.jpg" class="card-img" alt="board game photo"> 
             <div class="card-img-overlay"> 
+                <br><br><br>
                 <div class="container">
                     <div class="bg-light justify-content-center border rounded-pill">
                             <h5 class=" card-title justify-content-center">
@@ -46,18 +64,18 @@
            </div>
        </div> 
     </header>
+
     <section>
-        <div class="container">
-            <div class="row m-3">
-                <div class="col-lg-7 bg-light justify-content-around gamePanel">
+        <div class="container justify-content-around">
+            <div class="row my-3">
+                <div class="col-lg-7 bg-light gamePanel py-3 mx-0 border rounded shadow">
                     <h2>Zoom Control Panel</h2>
-                    <img src="images/Zoom.logo.jpg" class="img-fluid" alt="Zoom Logo">
+                    <img src="images/Zoom.logo.jpg" class="img-fluid py-3" alt="Zoom Logo">
                     <!-- <iframe src="https://www.zoom.us/signin" style="border:none;" title="Iframe Example"></iframe> -->
                 </div>
 
                 <!-- ---------------------------- GAME PANEL ------------------------------------------------>
-                <div class="col-lg-5 bg-warning justify-content-around zoomPanel">
-
+                <div class="col-lg-5 bg-warning zoomPanel p-3 mx-0 border rounded shadow">
 
                     <div class = "box">
                         <h1>Despicable Chess</h1>
