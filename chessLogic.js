@@ -412,6 +412,8 @@ function drawBoard () {
               board = document.querySelector(idCode);
               board.innerHTML = (currentPiece) ? currentPiece.utfCode : '&nbsp';
             board.style.color = currentPiece.color;
+            board.style.fontSize = "1.4rem";
+            board.style.textAlign = "center";
 
             // console.log(`currentPiece.color: ${currentPiece.color}`)
 
