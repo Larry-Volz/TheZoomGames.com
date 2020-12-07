@@ -91,8 +91,129 @@ const chessModule = `<div class = "box">
     </table>
 </div>`;
 
+const jeopardyModule = `
+<div class="container mt-2">
+        <div class = "row">
+            <h1 class = "display-4 text-light m-2">Jeopardy</h1>"
+        </div>
+        <div class="row">
+            <table class="table table-dark bg-primary m-2">
+                <thead>
+                    <tr>
+                        <th scope = "col" id = "cat0"></th>
+                        <th scope = "col" id = "cat1"></th>
+                        <th scope = "col" id = "cat2"></th>
+                        <th scope = "col" id = "cat3"></th>
+                        <th scope = "col" id = "cat4"></th>
+                        <th scope = "col" id = "cat5"></th>
+                    </tr>
+                    <tr id="row0" class = "text-warning">
+                        <td id="00"></td>
+                        <td id="01"></td>
+                        <td id="02"></td>
+                        <td id="03"></td>
+                        <td id="04"></td>
+                        <td id="05"></td>
+                    </tr>
+                    <tr id="row1" class = "text-warning">
+                        <td id="10"></td>
+                        <td id="11"></td>
+                        <td id="12"></td>
+                        <td id="13"></td>
+                        <td id="14"></td>
+                        <td id="15"></td>
+                    </tr>
+                    <tr id="row2" class = "text-warning">
+                        <td id="20"></td>
+                        <td id="21"></td>
+                        <td id="22"></td>
+                        <td id="23"></td>
+                        <td id="24"></td>
+                        <td id="25"></td>
+                    </tr>
+                    <tr id="row3" class = "text-warning">
+                        <td id="30"></td>
+                        <td id="31"></td>
+                        <td id="32"></td>
+                        <td id="33"></td>
+                        <td id="34"></td>
+                        <td id="35"></td>
+                    </tr>
+                    <tr id="row4"  class = "text-warning">
+                        <td id="40"></td>
+                        <td id="41"></td>
+                        <td id="42"></td>
+                        <td id="43"></td>
+                        <td id="44"></td>
+                        <td id="45"></td>
+                    </tr>
+
+                </thead>
+            </table>
+        </div>
+        <div class="row justify-content-center">
+            <div id = "player1" class="col-3 bg-success m-2  border rounded">Player 1
+                <p>Score: <span id="p1-score">0</span></p>
+            </div>
+            <div id = "player2" class="col-3 bg-warning m-2  border rounded">Player 2
+                <p>Score: <span id="p2-score">0</span></p>
+            </div>
+            <div id = "player3" class="col-3 bg-danger m-2  border rounded">Player 3
+                <p>Score: <span id="p3-score">0</span></p>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <button class = " btn btn-info border rounded mt-5" id = "reload">Restart Game</button>
+        </div>
+    </div>
+    
+        <!-- Modal -->
+    <div class="modal fade bg-dark" id="qModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header ">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div id="qDisplay" class="modal-body">
+            ...
+            </div>
+            <div class="modal-footer">
+            <button id = "getAnswer" type="button" class="btn btn-success" data-dismiss="modal">Answer</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="aModal"  data-backdrop = "false" tabindex="-1" role="dialog"  aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header ">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div id="aDisplay" class="modal-body">
+            ...
+            </div>
+            <div class="modal-footer">
+            <button id = "getAnswer" type="button" class="btn btn-success" data-dismiss="modal">Done</button>
+            </div>
+        </div>
+        </div>
+    </div>
+`;
 
 window.onload = function() {
+
+    $("#jeopardy-game").on("click", () => {
+        console.log("clicked")
+
+        document.getElementById("game-area").innerHTML = jeopardyModule;
+        // chessGame();
+    })
+
 
     $("#chess-game").on("click", () => {
         console.log("clicked")
@@ -100,9 +221,6 @@ window.onload = function() {
         document.getElementById("game-area").innerHTML = chessModule;
         // chessGame();
     })
-
-
-
 
 
 

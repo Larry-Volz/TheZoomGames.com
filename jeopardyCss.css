@@ -1,0 +1,29 @@
+/* table { width: inherit !important; } */
+
+body {
+    background-color: black;
+}
+table {
+    width: 100%;
+}
+
+th {
+    color: white;
+    text-align: center;
+    font-size: .7rem;
+}
+
+td {
+    color: yellow;
+    font-size: .8rem;
+    text-align: center;
+    width: 16%;
+}
+
+.modal:nth-of-type(even) {
+    z-index: 1052 !important;
+}
+.modal-backdrop.show:nth-of-type(even) {
+    z-index: 1051 !important;
+}
+
