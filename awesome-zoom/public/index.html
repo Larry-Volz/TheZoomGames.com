@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>zoom</title>
+  <meta charset="utf-8">
+</head>
+<body>
+  <style>
+    html,body{height:100%;}
+    html,body,iframe{border:none;padding:0;margin:0;}
+    div.box{display:flex;flex-flow:column;height:100%;}
+    div.row{clear:both;padding:5px;}
+    div.col{display:inline-block;min-width:13%;}
+    div.sign-div{display:inline-block;width:85%;}
+    div.sign-div input{width:100%;}
+    pre.url{white-space:normal;display:block;word-wrap:break-word;word-break:break-all;}
+    div.row button{margin-right:20px;font-size:16px;padding:4px 10px;background:#0cf;color:#333;}
+    div.iframe-row{flex:1 1 auto;}
+    iframe{width:100%;min-height:100%;}
+  </style>
+  <div id="demo3sdk-box" class="box">
+    <div class="row">
+      <div class="col">
+        <span>user name</span>
+      </div>
+      <div class="col">
+        <input value="lio" type="text" name="name">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <span>meeting ID</span>
+      </div>
+      <div class="col">
+        <!-- <input id="metid" value="86002890126" type="text" name="meetingNumber"> -->
+        <select id="metid" name="meetingNumber">
+          <option value="86002890126" pwd="GFuk5a">86002890126</option>
+          <option value="84939138140" pwd="Q4wiN6">84939138140</option>
+        </select>
+        <input type="text" disabled="disabled">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <span>password (optional)</span>
+      </div>
+      <div class="col">
+        <input id="pwd" value="GFuk5a" type="text" name="passWord">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <span>host?</span>
+      </div>
+      <div class="col">
+        <input type="checkbox" name="role" value="1" checked="checked">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <span>signature (optional)</span>
+      </div>
+      <div class="sign-div">
+        <input id="signature" type="text" name="signature">
+      </div>
+    </div>
+    <div class="row">
+      <button id="join">join</button>
+      <!-- <button id="websdk-sign-join">websdk-sign:join</button> -->
+      <!-- <button id="php-sign-join">php-sign:join</button> -->
+      <!-- <button id="create-join">create:join</button> -->
+    </div>
+    <div class="row">
+      <pre class="signature"></pre>
+      <pre class="url"></pre>
+    </div>
+
+    <div class="row iframe-row">
+      <iframe src=""></iframe>
+    </div>
+  </div>
+  <script src="https://source.zoom.us/1.8.3/lib/vendor/jquery.min.js"></script>
+  <script src="js/tool.js"></script>
+  <script src="js/funs.js"></script>
+  <script src="js/index.js"></script>
+</body>
+</html>
