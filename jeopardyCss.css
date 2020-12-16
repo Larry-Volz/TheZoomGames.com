@@ -3,17 +3,17 @@
 body {
     background-color: black;
 }
-table {
+#jeopardy-table {
     width: 100%;
 }
 
-th {
+#jeopardy-table th {
     color: white;
     text-align: center;
     font-size: .7rem;
 }
 
-td {
+#jeopardy-table td {
     color: yellow;
     font-size: .8rem;
     text-align: center;

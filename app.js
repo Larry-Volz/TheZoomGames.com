@@ -97,7 +97,7 @@ const jeopardyModule = `
             <h1 class = "display-4 text-light m-2">Jeopardy</h1>"
         </div>
         <div class="row">
-            <table class="table table-dark bg-primary m-2">
+            <table id="jeopardy-table" class="table table-dark bg-primary m-2">
                 <thead>
                     <tr>
                         <th scope = "col" id = "cat0"></th>
@@ -161,6 +161,9 @@ const jeopardyModule = `
             <div id = "player3" class="col-3 bg-danger m-2  border rounded">Player 3
                 <p>Score: <span id="p3-score">0</span></p>
             </div>
+        </div>
+        <div class="row justify-content-center">
+            <p class = "text-primary">Click the button if you/your team get a correct answer</p>
         </div>
         <div class="row justify-content-center">
             <button class = " btn btn-info border rounded mt-5" id = "reload">Restart Game</button>
