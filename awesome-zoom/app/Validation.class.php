@@ -11,11 +11,12 @@ class Validation
         if (!is_array($rule))
             return false;
 
-        foreach ($_POST as $field => $val)
+        foreach ($_REQUEST as $field => $val)
             // if field have rule.
             if (array_key_exists($field, $rule))
-                if (!self::validation($val, $rule[$field]))
-                    return false;
+                foreach ($rule[$field] as $row)
+                    if (!self::validation($val, $row))
+                        return false;
         return true;
     }
 
@@ -24,15 +25,20 @@ class Validation
      */
     private function validation($val, $rule)
     {
-        foreach ($rule as $row)
-        {
-            switch ($row) {
-                case '':
-                    break;
+        switch ($rule) {
+            case is_integer($rule):
+                return (strlen($val) === $rule);
+                break;
+            case is_array($rule):
+                switch (current($rule)) {
+                    case 'in':
+                        return in_array($val, end($rule));
+                        break;
+                }
+                break;
 
-                default:
-                    return self::regex($val, $row);
-            }
+            default:
+                return self::regex($val, $rule);
         }
     }
 
