@@ -209,9 +209,9 @@ window.onload = function() {
 
     $("#jeopardy-game").on("click", () => {
         console.log("clicked")
-
         document.getElementById("game-area").innerHTML = jeopardyModule;
         // chessGame();
+        getQuestions();
     })
 
 

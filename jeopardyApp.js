@@ -79,7 +79,7 @@ let getRND = () => Math.floor(Math.random()*18430);
 
 
 
-getQuestions();
+
 
 
 
@@ -144,6 +144,8 @@ async function getQuestions() {
 
         } while (validCategories < 6)
 
+        console.log(categories);
+
 
     fillBoard(categories);
 
@@ -167,7 +169,7 @@ function fillBoard(categories){
        
         //cat0 - cat5 are the header cells
         $(`#cat${idx}`).text(cat);
-        for (let i=0; i<6;i++){
+        for (let i=0; i< 6;i++){
 
             //check value
             // try{
@@ -179,13 +181,23 @@ function fillBoard(categories){
 
             scr = (idx+1)*200;
             // console.log(`categories[cat][idx].value = ${categories[cat][idx].value}`)
-            try {categories[cat][idx].value = scr;
+            try {
                 // console.log(`cat-${i}:  ${cat}`)
+                if (idx < 5) {
+                    categories[cat][idx].value = scr;
+                }
+
         } catch(e) {
+            console.log(categories[cat][idx]);
+            console.log("cat:", cat);
+            console.log("idx:", idx);
             console.log(`**** ERROR **** = ${e}`)
            // location.reload();
         }
+            //print to board
             $(`#${idx}${i}`).text(scr);
+            console.log($(`#${idx}${i}`));
+            
         }
     });
 }
