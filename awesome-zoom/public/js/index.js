@@ -35,7 +35,7 @@ $(document).on('click', '.card-body', function() {
   if (window.zoomflag === true)
     return false
   window.zoomflag = true
-  var signendpoint = './signature'
+  var signendpoint = './index.php/signature'
   var meetinghtml = 'awesome-zoom/public/meeting.html?'
   var data = {}
   var foo = {}
