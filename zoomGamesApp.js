@@ -1,3 +1,17 @@
+/*
+TODO'S
+- Set up a sign in/sign-up page
+- connect ^ to database so players can sign in with email
+    - give option to be on mailing list for new games/partners
+- set up website so each side checks dbase every few seconds for an update if another player clicked a 
+button and update the screen on both sides if so
+- or set up a system to push data to other players?
+- Maybe set up national high scores
+- Set up friends list - and high scores amongst friends - with option to publish them
+- set up "invite a friend" - automated e-mail (possibly using gmail)
+- finish Zoom set-up
+*/
+
 const chessModule = `<div class = "box">
 <h1 class = "text-center">Cheeky Chess</h1>
     <table class ="content">
@@ -208,12 +222,79 @@ const jeopardyModule = `
     </div>
 `;
 
+const connect4Module = `<div class="container">
+<div class="row justify-content-center text-center mt-2">
+  <div id="titleGradient">
+   <h1 id="c4-h1">Connectix</h1>
+  </div>
+</div>
+<div class="row justify-content-center text-center">
+  <div class = "note">*It's just like "Connect Four" but more fun to say</div><br><br>
+</div>
+<div id = "vanish-me" class="row justify-content-center text-center">
+  <div id="player-options">
+    <form class = "form" action="#" id="player-form">
+      <label for = "player1-color">Player 1 pick a color</label>
+        <select id="player1-color" name = "player1-color">
+          <option value="sunrise" selected>sunrise</option>
+          <option value="peach">peach</option>
+          <option value="pink-rose">pink rose</option>
+          <option value="mauve">mauve</option>
+        </select>
+        <br>
+      <label for = "player2-color">Player 2 pick a color</label>
+        <select id="player2-color" name = "player2-color">
+          <option value="lime">lime</option>
+          <option value="frost">frost</option>
+          <option value="purples" selected>purples</option>
+          <option value="greys">greys</option>
+        </select>
+        <br>
+      <label for = "num-cols"># of columns</label>
+        <select id="num-cols" name = "num-cols">
+          <option value=6>6</option>
+          <option value=7>7</option>
+          <option value=8>8</option>
+          <option value=9>9</option>
+          <option value=10>10</option>
+          <option value=11>11</option>
+          <option value=11>12</option>
+        </select>
+        <br>
+      <label for = "num-rows"># of rows</label>
+        <select id="num-rows" name = "num-rows">
+          <option value=6>6</option>
+          <option value=7>7</option>
+          <option value=8>8</option>
+          <option value=9>9</option>
+          <option value=10>10</option>
+          <option value=11>11</option>
+          <option value=11>12</option>
+        </select> 
+        <br><br>
+        <button class = "btn btn-primary" id="play-btn">PLAY!</button>
+    </form>
+    <br>
+  </div>
+</div>
+<div class = "row justify-content-center text-center">
+  <div id="game">
+    <table id="c4-board" style = "display: none;"></table>
+  </div>
+</div>
+<div class = "row justify-content-center text-center">
+  <div>
+  <span class = "instructions"><br>Take turns.<br>Click the top row to drop a piece.
+  <br>First to connect 4 wins!</span></div> 
+</div>
+</div>`;
+
 window.onload = function() {
 
     $("#jeopardy-game").on("click", () => {
         console.log("clicked")
         document.getElementById("game-area").innerHTML = jeopardyModule;
-        // chessGame();
+
         getQuestions();
     })
 
@@ -225,6 +306,39 @@ window.onload = function() {
         // chessGame();
     })
 
+    $("#connect4-game").on("click", () => {
+        document.getElementById("game-area").innerHTML = connect4Module;
+        
+        document.getElementById("play-btn").addEventListener("click", (evt)=>{
+            evt.preventDefault();
+          
+            //retrieve input data to pass to Game()
+            const color1 = document.getElementById("player1-color").value;
+            const color2 = document.getElementById("player2-color").value;
+            const numCols = document.getElementById("num-cols").value;
+            const numRows = document.getElementById("num-rows").value;
+          
+            const player1 = new Player(1,color1);
+            const player2 = new Player(2,color2)
+            
+            
+            // document.getElementById("player-options").style.display="none";
+            $("#vanish-me").animate({
+              width: 0,
+              height:0
+            },1500, ()=>{
+              $("#vanish-me").css("display","none")
+            });
+          
+            let newGame = new C4Game(player1, player2, numRows, numCols);
+              
+          
+            
+            //start game
+             //hide set-up options
+            
+          })
+    })
 
 
 
@@ -238,8 +352,7 @@ window.onload = function() {
 
 
 
-
-  }//end of onload - keep all jquery inside of here
+  }//end of onload - keep all jquery here
 
 
 
