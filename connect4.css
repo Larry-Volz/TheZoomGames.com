@@ -1,0 +1,116 @@
+body {
+  text-align: center;
+  background-color: #90BAD4;
+  font-family: 'Roboto', sans-serif;
+}
+
+
+/* title */
+#c4-h1 {
+  /* display: inline-block; */
+ 
+  font-size: 1.5rem;
+  
+  color: yellow;
+}
+
+#titleGradient {
+  border-radius: 50%;
+  text-align: center;
+  width: 320px;
+  margin: auto;
+  margin-bottom: 8px;
+  padding: 10px;
+  background-image: linear-gradient(to bottom right, #2787f5, #c527f5, red, yellow);
+}
+
+/* game board table  */
+
+#c4-board table {
+  size: 320px;
+  margin: auto;
+  background-color: white;
+}
+#c4-board td {
+  width: 45px;
+  height: 45px;
+  border: solid 1px #666;
+  
+}
+
+.c4-td {
+  cursor: default;
+}
+
+/* pieces are div within game table cells: draw as colored circles */
+
+.piece {
+  /* TODO: make into circles */
+  margin: 5px;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+}
+
+/* TODO: make pieces red/blue,  depending on player 1/2 piece */
+
+.peach{
+  background-image: linear-gradient(to bottom right, #ed4264, #ffedbc);
+}
+
+.mauve{
+  background-image: linear-gradient(to bottom right, #42275a, #734b6d);
+}
+
+.sunrise {
+  background-image: linear-gradient(to bottom right, #ff0329, #FFFF00);
+}
+
+.pink-rose {
+  background-image: linear-gradient(to bottom right, #ffafbd, #ffc3a0);
+}
+
+.lime {
+  background-image: linear-gradient(to bottom right, #56ab2f, #a8e063);
+}
+
+.frost {
+  background-image: linear-gradient(to bottom right, #000428, #004e92);
+}
+
+.purples {
+  background-image: linear-gradient(to bottom right, #2787f5, #c527f5);
+}
+
+.greys {
+  background-image: linear-gradient(to bottom right, #bdc3c7, #2c3e50);
+}
+
+.p1Win {
+  background-image: linear-gradient(to bottom right, yellow, #ff0329);
+}
+
+.p2Win {
+  background-image: linear-gradient(to bottom right, #c527f5,  #2787f5)
+}
+
+/* column-top is table row of clickable areas for each column */
+
+#column-top td {
+  border: dashed 1px lightgray;
+}
+
+#column-top td:hover {
+  background-color: gold;
+}
+
+.note {
+  font-style: italic;
+}
+
+.instructions {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+}
+
