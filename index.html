@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="jeopardyCss.css">
     <link rel="stylesheet" href="chessStylesheet.css">
     <link rel="stylesheet" href="connect4.css">
+    <link rel="stylesheet" href="checkersStyle.css">
 
     <title>TheZOOMGames</title>
 </head>
@@ -19,13 +20,13 @@
     <header>
 
         <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
-            <a class="navbar-brand" href="#">ZOOM Games</a>
+            <a class="navbar-brand" href="javascript:history.go(0)">ZOOM Games</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup">
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div class="navbar-nav">
-                <a class="nav-item nav-link mx-3 active" href="#">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link mx-3 active" href="javascript:history.go(0)">Home <span class="sr-only">(current)</span></a>
                 <a class="nav-item nav-link mx-3" href="#">Connect with Zoom</a>
                 <a class="nav-item nav-link mx-3" href="#">Pick a Game</a>
                 <!-- <a class="nav-item nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> -->
@@ -103,6 +104,12 @@
                                     </div>
                                 </div>
 
+                                <div class="point-btn card bg-success">
+                                    <div id="checkers-game" class=" alert-success card-body">
+                                        Checkers
+                                    </div>
+                                </div>
+
                                 <div class="point-btn card bg-primary">
                                     <div id="chess-game" class=" alert-primary card-body">
                                         Chess (under development)
@@ -144,6 +151,7 @@
 <script src = "api_logic.js"></script>
 <script src="zoomGamesApp.js"></script>
 <script src="connect4.js"></script>
+<script src="checkersScript.js"></script>
 
 </body>
 </html>

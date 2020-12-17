@@ -289,6 +289,30 @@ const connect4Module = `<div class="container">
 </div>
 </div>`;
 
+const checkersModule = `
+<div class="row justify-content-center">
+    <h3 class=" text text-light text-center">Red goes first - jumps are mandatory</h3>
+</div>
+<div class="row justify-content-center">
+    <div class="column">
+        <div id="board">
+        <div class="tiles"></div>
+        <div class="pieces">
+            <div class="player1pieces">
+            </div>
+            <div class="player2pieces">
+            </div>
+        </div>
+    </div>
+</div>
+<div class = "row justify-content-center">
+    <div class ="col-12">
+        <button id="cleargame" class = "btn btn-primary mt-2">Reset Game</button>
+    </div>
+</div>
+
+`
+
 window.onload = function() {
     console.log("updated zoomGamesApp.js connected")
 
@@ -305,6 +329,13 @@ window.onload = function() {
 
         document.getElementById("game-area").innerHTML = chessModule;
         // chessGame();
+    })
+
+    $("#checkers-game").on("click", () => {
+        console.log("clicked")
+
+        document.getElementById("game-area").innerHTML = checkersModule;
+        playCheckers();
     })
 
     $("#connect4-game").on("click", () => {
