@@ -45,7 +45,7 @@ class AwesomeZoom
             die(header('Location:index.html'));
 
         // path info -> method name.
-        $this->pinfo = current(explode('/', trim($_SERVER['PATH_INFO'], '/')));
+        $this->pinfo = current(explode('/', ltrim($_SERVER['PATH_INFO'], '/')));
 
         // check if in dead loop method list.
         if (in_array($this->pinfo, self::DENY_METHODS))
@@ -69,7 +69,7 @@ class AwesomeZoom
             'role' => ['require', ['in', [0, 1]]]
         ])) {
             $arr['apiKey'] = self::API_KEY;
-            $arr['signature'] = self::generateSignature(
+            $arr['signature'] = GenerateSignature::generateSignature(
                 self::API_KEY,
                 self::API_SECRET,
                 $_POST['meetingNumber'],
@@ -107,19 +107,6 @@ class AwesomeZoom
         $arr['result'] = $emsg;
         $arr['status'] = $ecode < 300;
         JsonResponse::error($arr);
-    }
-
-    /**
-     * generate signature function from zoom documentation.
-     */
-    private function generateSignature($api_key, $api_secret, $meeting_number, $role)
-    {
-        $time = time() * 1000 - 30000;//time in milliseconds (or close enough)
-        $data = base64_encode($api_key . $meeting_number . $time . $role);
-        $hash = hash_hmac('sha256', $data, $api_secret, true);
-        $_sig = $api_key . "." . $meeting_number . "." . $time . "." . $role . "." . base64_encode($hash);
-        //return signature, url safe base64 encoded
-        return rtrim(strtr(base64_encode($_sig), '+/', '-_'), '=');
     }
 
     /**
