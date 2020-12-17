@@ -38,6 +38,10 @@ body {
   
 }
 
+.c4-td {
+  cursor: default;
+}
+
 /* pieces are div within game table cells: draw as colored circles */
 
 .piece {

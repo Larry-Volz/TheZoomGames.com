@@ -25,7 +25,7 @@ the four in a row before the win sequence
  */
 
 
-
+console.log("connect4.js connected")
 
 
  class Player {
@@ -124,6 +124,7 @@ class C4Game {
       const row = document.createElement("tr");
       for (let x = 0; x < this.WIDTH; x++) {
         const cell = document.createElement("td");
+        cell.classList.add("c4-td")
         cell.setAttribute("id", `${y}-${x}`);
         row.append(cell);
       }

@@ -166,13 +166,13 @@ const jeopardyModule = `
             </table>
         </div>
         <div class="row justify-content-center">
-            <div id = "player1" class="col-3 bg-success m-2  border rounded">Player 1
+            <div id = "player1" class="point-btn col-3 bg-success m-2  border rounded">Player 1
                 <p>Score: <span id="p1-score">0</span></p>
             </div>
-            <div id = "player2" class="col-3 bg-warning m-2  border rounded">Player 2
+            <div id = "player2" class="point-btn col-3 bg-warning m-2  border rounded">Player 2
                 <p>Score: <span id="p2-score">0</span></p>
             </div>
-            <div id = "player3" class="col-3 bg-danger m-2  border rounded">Player 3
+            <div id = "player3" class="point-btn col-3 bg-danger m-2  border rounded">Player 3
                 <p>Score: <span id="p3-score">0</span></p>
             </div>
         </div>
@@ -290,6 +290,7 @@ const connect4Module = `<div class="container">
 </div>`;
 
 window.onload = function() {
+    console.log("updated zoomGamesApp.js connected")
 
     $("#jeopardy-game").on("click", () => {
         console.log("clicked")

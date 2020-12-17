@@ -144,8 +144,6 @@ async function getQuestions() {
 
         } while (validCategories < 6)
 
-        console.log(categories);
-
 
     fillBoard(categories);
 
@@ -211,6 +209,7 @@ function fillBoard(categories){
     let boardCellCount = 0;
 
     //put event listeners on all the td's
+   
     $(".table").on("click", (evt) => {
         $id = $(evt.target).attr('id');
 

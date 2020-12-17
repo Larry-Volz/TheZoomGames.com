@@ -2,6 +2,7 @@
 
 body {
     background-color: black;
+    cursor: default;
 }
 #jeopardy-table {
     width: 100%;
@@ -27,3 +28,7 @@ body {
     z-index: 1051 !important;
 }
 
+
+  td, .point-btn {
+    cursor: pointer;
+  }
