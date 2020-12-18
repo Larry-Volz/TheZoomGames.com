@@ -4,4 +4,5 @@ spl_autoload_register(function($class) {
     if (is_file($filename))
         require_once $filename;
 });
+require_once AWESOME_ZOOM.'funs.php';
 new app\AwesomeZoom();

@@ -8,7 +8,7 @@ class Validation
      */
     public function validate($rule=null)
     {
-        if (!is_array($rule))
+        if (!is_array($rule) || !$_REQUEST)
             return false;
 
         foreach ($_REQUEST as $field => $val)

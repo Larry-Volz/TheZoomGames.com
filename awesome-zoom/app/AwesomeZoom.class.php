@@ -10,7 +10,7 @@ class AwesomeZoom
     const CLIENT_SECRET = 'GC1OqzVfuYq8fJ6rv2X9dfIuXjVbSYOO';
 
     const OAUTH_AUTHORIZE = 'https://zoom.us/oauth/authorize';
-    const OAUTH_ACCESSTOKEN = 'https://zoom.us/oauth/authorize';
+    const OAUTH_TOKEN = 'https://zoom.us/oauth/token';
     const DENY_METHODS = ['__construct', 'run'];
     const ERRORS = [
         5001 => 'Unknow error!',
@@ -22,16 +22,6 @@ class AwesomeZoom
 
     public function __construct() {
         self::run();
-    }
-
-    // die dump.
-    private function dd($bar)
-    {
-        ob_start();
-        echo('<pre>');
-        var_dump($bar);
-        echo('</pre>');
-        die(ob_get_clean());
     }
 
     /**
@@ -112,142 +102,54 @@ class AwesomeZoom
     /**
      * Request User Authorization.
      */
-    public function userAuth()
+    private function userAuth()
     {
         $arr[] = 'response_type=code';
-        $arr[] = 'redirect_uri=https://02fa5d6d5265.ngrok.io/accessToken';
-        $arr[] = 'client_id='.self::CLIENT_ID;
-        JsonResponse::json([
-            'url' => 'https://zoom.us/oauth/authorize?' . implode('&', $arr)
-        ]);
-    }
+        $arr[] = 'redirect_uri=' . root() . 'getToken';
+        $arr[] = 'client_id=' . self::CLIENT_ID;
+        $url = self::OAUTH_AUTHORIZE . '?' .  implode('&', $arr);
 
-    public function receive()
-    {
-        var_dump($_REQUEST);
+        if ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')
+        {
+            JsonResponse::json([
+                'url' => $url
+            ]);
+        } else {
+            header("Location: $url");
+        }
     }
 
     /**
      * Request Access Token.
      */
-    public function accessToken()
+    public function getToken()
     {
         if (Validation::validate(['code' => ['require', 33]]))
         {
             $data['grant_type'] = 'authorization_code';
             $data['code'] = $_GET['code'];
-            $data['redirect_uri'] = 'https://02fa5d6d5265.ngrok.io/receive';
-            foreach ($data as $key => $value)
-                $arr[] = "$key=$value";
-
-            $url = 'https://zoom.us/oauth/token';//.implode('&', $arr);
-            $bar = base64_encode(self::CLIENT_ID.':'.self::CLIENT_SECRET);
+            $data['redirect_uri'] = root() . 'getToken';
+            $url = self::OAUTH_TOKEN;
+            $bar = base64_encode(self::CLIENT_ID . ':' . self::CLIENT_SECRET);
             $header[] = "Authorization: Basic $bar";
-            $res = self::curl($url,$data,$header,$a=1);
-            if ($res)
+            $res = json_decode(httpsCurl($url, $data, $header), true);
+            dump($res);
+            if (Validation::validate(['access_token' => ['require', 33]]))
             {
-                var_dump($res);
-            } else {
-                $ret['url'] = $url;
-                $ret['data'] = $data;
-                $ret['header'] = $header;
-                JsonResponse::json($ret);
+
             }
-        }
-    }
-
-    private function curl($url=null, $data=null, $header=null)
-    {
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_HTTPHEADER => $header,
-            CURLOPT_POSTFIELDS => $data
-            // CURLOPT_HTTPHEADER => array(
-            //     "authorization: Bearer JWT",
-            //     "content-type: application/json"
-            // ),
-        ));
-        $output=curl_exec($ch);
-        curl_close($ch);
-        return $output;
-
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        $output=curl_exec($ch);
-        curl_close($ch);
-
-        // $ch = curl_init();
-        // curl_setopt($ch, CURLOPT_URL, $url);
-        // curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-        // if ($data !== null)
-        // {
-        //     curl_setopt($ch, CURLOPT_POST, true);
-        //     curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        // }
-        // $output = curl_exec($ch);
-        // curl_close($ch);
-        return $output;
-    }
-
-    public function curlddddd($url,$post_data,&$header=null,&$http_status)
-    {
-        $ch=curl_init();
-        // user credencial
-        curl_setopt($ch, CURLOPT_USERPWD, "username:passwd");
-        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL, $url);
-
-        // post_data
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-
-        if (!is_null($header))
-            curl_setopt($ch, CURLOPT_HEADER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        // curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: application/json', 'Content-Type: application/json'));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-
-        curl_setopt($ch, CURLOPT_VERBOSE, true);
-
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-        $response = curl_exec($ch);
-
-        $body = null;
-        // error
-        if (!$response) {
-            $body = curl_error($ch);
-            // HostNotFound, No route to Host, etc  Network related error
-            $http_status = -1;
         } else {
-           //parsing http status code
-            $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-            if (!is_null($header)) {
-                $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-
-                $header = substr($response, 0, $header_size);
-                $body = substr($response, $header_size);
-            } else {
-                $body = $response;
-            }
+            self::userAuth();
         }
+    }
 
-        curl_close($ch);
+    public function refreshToken()
+    {
 
-        return $body;
+    }
+
+    public function craeteMeeting()
+    {
+        dump($_REQUEST);
     }
 }
