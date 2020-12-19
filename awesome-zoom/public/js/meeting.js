@@ -11,10 +11,7 @@ ZoomMtg.setZoomJSLib('https://dmogdx0jrul3u.cloudfront.net/1.8.3/lib', '/av')
 
 ZoomMtg.preLoadWasm()
 ZoomMtg.prepareJssdk()
-
-console.log(testTool.parseQuery())
 joinMeeting(testTool.parseQuery())
-
 function joinMeeting(gmc)
 {
     ZoomMtg.init({
@@ -28,10 +25,29 @@ function joinMeeting(gmc)
                 meetingNumber: gmc.mn,
                 userName: gmc.name,
                 passWord: gmc.pwd,
-                error(res) {
+                error: function(res) {
+                    console.clear()
                     // console.log(res)
+                    removeDivPhone()
+                },
+                success: function(res) {
+                    console.clear()
+                    // console.log(res)
+                    removeDivPhone()
                 }
             })
         }
     })
+}
+
+function removeDivPhone()
+{
+    var foo = setInterval(function()
+    {
+        if ($(document).find('div#phone').remove())
+        {
+            clearInterval(foo)
+        }
+        console.log('foo')
+    },1000)
 }
