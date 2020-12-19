@@ -1,5 +1,5 @@
 <?php
-namespace app;
+namespace app\drivers;
 
 class JsonResponse
 {

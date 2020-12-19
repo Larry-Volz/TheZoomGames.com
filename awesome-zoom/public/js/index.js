@@ -27,7 +27,7 @@ $(document).ready(function() {
   // style += 'div.container-fluid{flex:1 1 auto;}'
   // style += 'section,div.container-fluid,div.container-fluid > div.row,'
   style += 'div.container-fluid > div.row > div.gamePanel'
-  style += '{flex:1 1 auto;padding:5px;min-height:530px;min-width:440px;}'
+  style += '{flex:1 1 auto;padding:5px;min-height:530px;min-width:450px;}'
   style += '</style>'
   $(document).find('head').append(style)
 })

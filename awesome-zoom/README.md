@@ -19,3 +19,27 @@ Path | Description
 /awesome-zoom/public/js/index.js              | index.js
 /awesome-zoom/public/js/meeting.js            | meeting.js
 /awesome-zoom/public/js/tool.js               | tool.js
+
+## Folder Constant
+Constant | Description
+--- | ---
+EXT | class ext
+DIR | DIRECTORY_SEPARATOR
+APP_PATH | /
+APP_CORE | awesome-zoom path
+APP_BOOTSTRAP | bootstrap file
+APP_ROOT | site root
+APP_NAME | app name
+
+## Path | .EXT
+Path | .EXT
+--- | ---
+awesome-zoom/app | .php
+awesome-zoom/app/database | .class.php
+awesome-zoom/app/drivers | .class.php
+awesome-zoom/app/http | .class.php
+awesome-zoom/app/services | .class.php
+awesome-zoom/bootstrap | .php
+awesome-zoom/config | .php
+awesome-zoom/database/migrations | .db.php
+awesome-zoom/resources/functions | .php

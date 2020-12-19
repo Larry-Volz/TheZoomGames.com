@@ -1,22 +1,35 @@
 <?php
-namespace form;
+namespace app\drivers;
+
 class Validation
 {
+    static private $data = null;
+
+    public function data($data=null)
+    {
+        if ($data !== null)
+            self::$data = $data;
+        return self::$data;
+    }
+
     /**
      * form data validation.
      * rule format: ['field' => rule]
      */
-    public function validate($rule=null)
+    public function validate($rule=null, $data=null)
     {
-        if (!is_array($rule) || !$_REQUEST)
+        if ($rule === null)
+            return true;
+        if ($data !== null)
+            self::data($data);
+        if (!$_REQUEST && !self::$data)
             return false;
+        $data = self::$data ? self::$data : $_REQUEST;
 
-        foreach ($_REQUEST as $field => $val)
-            // if field have rule.
-            if (array_key_exists($field, $rule))
-                foreach ($rule[$field] as $row)
-                    if (!self::validation($val, $row))
-                        return false;
+        foreach ($rule as $field => $row)
+            foreach ($row as $cell)
+                if (!self::validation($data[$field], $cell))
+                    return false;
         return true;
     }
 
@@ -36,7 +49,6 @@ class Validation
                         break;
                 }
                 break;
-
             default:
                 return self::regex($val, $rule);
         }
