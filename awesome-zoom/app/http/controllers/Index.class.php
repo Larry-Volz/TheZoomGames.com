@@ -15,6 +15,11 @@ class Index extends Controller
     //     parent::__construct();
     // }
 
+    public function getUser() {
+        $user = new User();
+        $user->getUser();
+    }
+
     /**
      * call Jwt::generateSignature().
      */
@@ -40,11 +45,8 @@ class Index extends Controller
     /**
      * Request Access Token.
      */
-    public function getToken()
-    {
+    public function getToken() {
         OAuth::getToken();
-        // $oauth = new OAuth();
-        // $oauth->getToken();
     }
 
     public function refreshToken()
@@ -57,8 +59,21 @@ class Index extends Controller
 
     public function test()
     {
-        dump('app\http\controllers\index::test()');
-        dump($_SERVER);
-        dump($_COOKIE);
+        // $ret['pwd'] = 'app\http\controllers\index::test()';
+        $db = new \PDO("mysql:host=localhost;dbname=awesome_zoom;", 'root', '123123', [\PDO::ATTR_PERSISTENT => true]);
+        $res = $db->query('select * from user;');
+        $sql = 'select * from user;';
+        foreach ($db->query($sql) as $num => $row)
+            foreach ($row as $key => $value)
+                if (!is_numeric($key))
+                    $ret[$num][$key] = $value;
+        dump($ret);
+        exit;
+        $res = $db->query('select * from awesome_zoom.user;');
+        // dump($res);
+        foreach ($res as $row) {
+            dump($row);
+        }
+        // JsonResponse::json($ret);
     }
 }

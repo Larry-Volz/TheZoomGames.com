@@ -51,7 +51,7 @@ class OAuth extends OAuthDrivers
     {
         User::register();
 
-        if (Validation::validate(['code' => ['require', 33]]))
+        if (!Validation::validate(['code' => ['require', 33]]))
         {
             $data['grant_type'] = 'authorization_code';
             $data['code'] = $_GET['code'];

@@ -11,7 +11,6 @@ class Sqlite
     //
     public function __construct()
     {
-        dump('app\drivers\Sqlite::__construct()');
         self::createFile();
         return self;
     }

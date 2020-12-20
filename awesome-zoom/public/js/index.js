@@ -2,8 +2,10 @@ var awesome_zoom = {
   iframe: null,
   bg_color: null,
   color: null,
-  getToken: '/getToken',
   zoomflag: false,
+  urls_gettoken: './getToken',
+  urls_register: './register',
+  urls_getuser: './getUser',
   selectors: function() {
     return [
       '#jeopardy-game',
@@ -15,6 +17,7 @@ var awesome_zoom = {
   },
   start: function()
   {
+    awesome_zoom.getUser()
     $(document).on('mousedown', awesome_zoom.selectors(), function(e) {
       console.log('mousedown here')
       awesome_zoom.bg_color = $(this).css('background-color')
@@ -26,8 +29,16 @@ var awesome_zoom = {
       // $(this).click()
     })
   },
+  getUser: function() {
+    $.ajax({
+      url: awesome_zoom.urls_getuser,
+      success: function(res) {
+        console.log(res)
+      }
+    })
+  },
   register: function() {
-    $.ajax({url:'./register'})
+    $.ajax({url:awesome_zoom.urls_register})
   },
   genIframe: function() {
     awesome_zoom.iframe = document.createElement('iframe')
@@ -87,8 +98,8 @@ var awesome_zoom = {
     hl += '<div class="azf-input card-body"><div>'
     hl += '<label for="azfname" class="azf-color"><b style="color:red;">*</b>'
     hl += '<b>Name</b></label><div style="position:relative;display:inline-block">'
-    hl += '<div class="azf-tips" style="display:none;"> Name required!</div>'
-    hl += '<input type="text" name="azfname" required></div>'
+    hl += '<div id="azf-tips" style="display:none;"> Name required!</div>'
+    hl += '<input id="azfname" type="text" name="azfname" required></div>'
     hl += '</div></div><div class="azf-button card-body">'
     hl += '<input class="azf-color" type="submit" id="azf-submit">'
     hl += '<input class="azf-color" type="button" id="azf-cancle" value="Cancle">'
@@ -98,9 +109,13 @@ var awesome_zoom = {
     $('#azf-cancle').on('click', function() {
       awesome_zoom.removeDialog()
     })
+    $(document).on('click keydown', '#azfname,#azf-tips', function() {
+      awesome_zoom.validationTips(1)
+      $('#azfname').focus()
+    })
   },
   validationTips: function(val) {
-    $('.azf-tips').css({
+    $('#azf-tips').css({
       left: '5px',
       color: 'red',
       height:'100%',
@@ -109,9 +124,9 @@ var awesome_zoom = {
       'font-weight': 'bolder',
     })
     if (val)
-      $('.azf-tips').hide()
+      $('#azf-tips').hide()
     else
-      $('.azf-tips').show()
+      $('#azf-tips').show()
   },
   removeDialog: function() {
     $('#awesome-zoom-form').remove()
@@ -120,16 +135,14 @@ var awesome_zoom = {
   },
   submitName: function() {
     $('#azf-submit').on('click', () => {
-      var name = $('input[name="azfname"]').on('click keydown',function() {
-        awesome_zoom.validationTips(1)
-      }).val()
+      var name = $('input[name="azfname"]').val()
       if (!name)
         return awesome_zoom.validationTips(name)
       awesome_zoom.removeDialog()
-      window.open(awesome_zoom.getToken+'?name='+name, '', '_blank')
-      return false
+      window.open(awesome_zoom.urls_gettoken+'?name='+name, '', '_blank')
+      // return false
       $.ajax({
-        url: '',
+        url: '/test',
         success: function(res) {
           console.log(res)
           awesome_zoom.removeDialog()
