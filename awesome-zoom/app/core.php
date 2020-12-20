@@ -2,6 +2,9 @@
 namespace app;
 class core
 {
+    private static $_map = [];
+    private static $_instance = [];
+
     // public function __construct() {}
 
     static public function run()
@@ -16,9 +19,6 @@ class core
         self::requireFiles(self::getFiles(CORE_RESOURCES.'functions'.DSE));
         self::autoload();
         new http\controllers\index();
-        new http\models\user();
-        new \config\Zoom();
-        new \database\migrations\user();
     }
 
     // Class library automatic loading.

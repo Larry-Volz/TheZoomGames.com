@@ -5,14 +5,15 @@ use app\drivers\JsonResponse;
 use app\services\OAuth;
 use app\services\Jwt;
 use app\services\Validation;
+use app\services\User;
 use \config\Zoom;
 
 class Index extends Controller
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    // public function __construct()
+    // {
+    //     parent::__construct();
+    // }
 
     /**
      * call Jwt::generateSignature().
@@ -39,8 +40,11 @@ class Index extends Controller
     /**
      * Request Access Token.
      */
-    public function getToken() {
+    public function getToken()
+    {
         OAuth::getToken();
+        // $oauth = new OAuth();
+        // $oauth->getToken();
     }
 
     public function refreshToken()
@@ -51,10 +55,10 @@ class Index extends Controller
         $header[] = "Authorization: Basic $bar";
     }
 
-    public function creteMeeting()
+    public function test()
     {
-        dump(Validation::validate(['test' => ['require']]));
-        dump($_REQUEST);
-        error_log("Oracle database not available!", 0);
+        dump('app\http\controllers\index::test()');
+        dump($_SERVER);
+        dump($_COOKIE);
     }
 }

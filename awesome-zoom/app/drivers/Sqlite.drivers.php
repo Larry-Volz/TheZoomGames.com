@@ -11,6 +11,7 @@ class Sqlite
     //
     public function __construct()
     {
+        dump('app\drivers\Sqlite::__construct()');
         self::createFile();
         return self;
     }
@@ -35,9 +36,12 @@ class Sqlite
 
     public function db()
     {
+        dump('drivers>Sqlite>db:here');
         $file = self::filename();
-        self::$db = new PDO("sqlite:$file");
-        return self::$db;
+        $this->db = new PDO("sqlite:$file");
+        $res = $this->db->exec('show tables;');
+        dump($res);
+        return $this->db;
     }
 
     public function untitled()

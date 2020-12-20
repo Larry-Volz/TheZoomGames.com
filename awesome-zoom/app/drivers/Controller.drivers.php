@@ -33,8 +33,9 @@ class Controller
 
         // check method exists and call the method.
         $pinfo = $this->pinfo;
+
         if (method_exists($this, $pinfo))
-            return $this->$pinfo();
+            $this->$pinfo();
         else
             $this->fail(5051);
     }
