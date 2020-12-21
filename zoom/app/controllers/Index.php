@@ -9,7 +9,18 @@ class Index extends BaseController
     {
         // get user info and register session id
         // return redirect('/index.html');
-        header('Location: /index.html');
+        // header('Location: /index.html');
+        $obj = new \app\models\Token();
+        $exp = '(`create_time` + `expires`) > UNIX_TIMESTAMP()';
+        $sql = $obj->whereRaw($exp)->fetchSql(true)->find();
+        dump($sql);
+        $f = "create_time,FROM_UNIXTIME((`create_time` + `expires`), '%H:%i:%s') as expires_time";
+        $f .= ",FROM_UNIXTIME(UNIX_TIMESTAMP(),'%H:%i:%s') as `now`";
+        dump($obj->field($f)->whereRaw($exp)->select()->toArray());
+        dump($obj->field($f)->select()->toArray());
+        $data['user_id'] = '1';
+        $res = $obj->save($data);
+        dump($res);
         exit;
     }
 

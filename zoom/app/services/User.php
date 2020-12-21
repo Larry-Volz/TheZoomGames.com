@@ -25,7 +25,7 @@ class User
                 return $res->getData();
         }
 
-        $data['session_id'] = $this->genSessionId();
+        $data['session_id'] = self::genSessionId();
         $data['create_time'] = time();
         $res = $this->user->save($data);
 
@@ -64,19 +64,29 @@ class User
         return $data;
     }
 
-    public function genSessionId() {
+    static public function genSessionId() {
         $res = md5(time().rand(1000,9999));
-        if ($this->user->where(['session_id'=>$res])->find())
-            return $this->genSessionId();
+        $foo = new self();
+        if ($foo->user->field('id')->where(['session_id'=>$res])->find())
+            return self::genSessionId();
         return $res;
     }
 
-    public function hasSessionId() {
+    static public function hasSessionId(): string
+    {
         if (!empty($_COOKIE[self::CKEY]))
             return $_COOKIE[self::CKEY];
         if (!empty($_POST[self::CKEY]))
             return $_POST[self::CKEY];
         if (!empty($_GET[self::CKEY]))
             return $_GET[self::CKEY];
+    }
+
+    static public function getSessionId(): string
+    {
+        $foo = new self();
+        if ($map['session_id'] = self::hasSessionId())
+            return $foo->user->field('session_id')->where($map)->find()->getData('session_id');
+        return '';
     }
 }

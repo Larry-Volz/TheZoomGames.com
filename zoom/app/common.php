@@ -18,3 +18,8 @@ function GV($var=null,$key=null)
     if ($ret === $var)
         return null;
 }
+
+function isEmpty($val=null): bool
+{
+    return empty($val);
+}

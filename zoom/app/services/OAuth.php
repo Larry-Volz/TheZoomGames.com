@@ -52,6 +52,8 @@ class OAuth
      */
     public function getToken()
     {
+        if (1)
+            return false;
         if (Validation::validate(['code' => ['require', 33]]))
         {
             $foo['grant_type'] = 'authorization_code';
@@ -66,21 +68,12 @@ class OAuth
                 'refresh_token' => ['require', 642],
                 'expires_in' => ['require', 'integer'],
             ])) {
-                $mUser = new UserModel();
-                $map['session_id'] = $_COOKIE[User::CKEY];
-                $data['user_id'] = $mUser->where($map)->find()->getData('id');
-                $data['token_type'] = $res['token_type'];
-                $data['access_token'] = $res['access_token'];
-                $data['refresh_token'] = $res['refresh_token'];
-                $data['expires'] = $res['expires_in'];
-                $data['create_time'] = $_SERVER['REQUEST_TIME'];
                 $token = new Token();
-
-                if ($ret['res'] = $token->save($data)) {
+                if ($token->saveToken($res)) {
                     // create meeting.
-                    $ret['data'] = $data;
-                    dump($ret);
+                    dump($res);
                 }
+                dump($token->getLastSql());
             } else {
                 // dump($res,1,'here');
             }
