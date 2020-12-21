@@ -2,7 +2,7 @@
 namespace app\services;
 
 use app\models\User as UserModel;
-use app\services\Json;
+// use app\services\Foo;
 
 class User
 {
@@ -38,21 +38,30 @@ class User
     public function setName()
     {
         if (!$sid = $this->hasSessionId()) {
-            $ret['errorCode'] = '1002';
+            $ret['errorCode'] = 1002;
             $ret['errorMessage'] = 'something wrong, try again.';
-            Json::error($ret);
+            Foo::error($ret);
         }
 
         if (empty($_POST['name'])) {
-            $ret['errorCode'] = '1003';
+            $ret['errorCode'] = 1003;
             $ret['errorMessage'] = 'name required!';
-            Json::error($ret);
+            Foo::error($ret);
         }
 
+        $map['session_id'] = $sid;
         $data['name'] = $_POST['name'];
-        $res = $this->user->save($data);
-        if ($res)
-            setcookie(self::CKEY, $data['session_id']);
+        return true;
+        $res = $this->user->where($map)->save($data);
+        if (!empty($res))
+            setcookie(self::CKEY, $map['session_id']);
+        else {
+            $ret['errorCode'] = 1004;
+            $ret['errorMessage'] = 'Failed to save data!';
+            Foo::error($ret);
+        }
+
+        return $data;
     }
 
     public function genSessionId() {

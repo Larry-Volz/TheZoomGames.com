@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： localhost
--- 生成日期： 2020-12-20 23:29:15
+-- 生成日期： 2020-12-21 04:56:02
 -- 服务器版本： 8.0.22
 -- PHP 版本： 7.4.4
 
@@ -46,7 +46,7 @@ TRUNCATE TABLE `config`;
 -- 转存表中的数据 `config`
 --
 
-INSERT INTO `config` (`key`) VALUES
+INSERT DELAYED INTO `config` (`key`) VALUES
 ('ZOOM_API_KEY'),
 ('ZOOM_API_SECRET'),
 ('ZOOM_IM_TOKEN'),
@@ -68,7 +68,8 @@ CREATE TABLE IF NOT EXISTS `match` (
   `host_id` bigint NOT NULL COMMENT 'host user id',
   `user_id` bigint DEFAULT NULL COMMENT 'guest user id',
   `create_time` bigint DEFAULT NULL COMMENT 'create time',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `match_id` (`user_id`,`host_id`) USING BTREE
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='player match';
 
 --
@@ -90,7 +91,8 @@ CREATE TABLE IF NOT EXISTS `meeting` (
   `password` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'meeting password',
   `create_time` bigint NOT NULL COMMENT 'create time',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `meeting_id` (`meeting_id`)
+  UNIQUE KEY `meeting_id` (`meeting_id`),
+  UNIQUE KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='meeting';
 
 --
@@ -113,7 +115,8 @@ CREATE TABLE IF NOT EXISTS `oauth_token` (
   `refresh_token` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'refresh token',
   `expires` int NOT NULL COMMENT 'expires time',
   `create_time` bigint NOT NULL COMMENT 'create time',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='OAuth token';
 
 --
@@ -129,19 +132,21 @@ TRUNCATE TABLE `oauth_token`;
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'user id',
   `session_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'session id',
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'player name',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'status',
   `create_time` bigint NOT NULL COMMENT 'create time',
-  PRIMARY KEY (`session_id`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `session_id` (`session_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 插入之前先把表清空（truncate） `user`
 --
 
-TRUNCATE TABLE `user`;COMMIT;
+TRUNCATE TABLE `user`;
+-- --------------------------------------------------------
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

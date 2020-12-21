@@ -25,6 +25,10 @@ var awesome_zoom = {
     ]
     .toString()
   },
+  getAccessToken: function() {
+    // window.open(awesome_zoom.urls_gettoken+'?name='+name, '', '_blank')
+    window.open(awesome_zoom.urls_gettoken, '', '_blank')
+  },
   start: function()
   {
     // console.log('console.log($.cookie()):')
@@ -99,17 +103,18 @@ var awesome_zoom = {
   askName: function() {
     $(document).ready(function() {
       awesome_zoom.createDialog()
-      if (awesome_zoom.userInfo.name)
-        return awesome_zoom.loadingDialog()
       awesome_zoom.submitName()
+      // awesome_zoom.loadingDialog()
     })
   },
   loadingDialog:function() {
-    $('.azf-input,.azf-button').remove();
+    if (!awesome_zoom.userInfo.name)
+      return false
+    $('.azf-input,.azf-button').remove()
     $('.azf-box h1').text('loading...').css({
       height: '100%',
       'line-height': $('.azf-box form').css('height')
-    });
+    })
     return false
     $.ajax({
       url: '/find match',
@@ -130,7 +135,7 @@ var awesome_zoom = {
     hl += 'div.azf>div.azf-box{background:' + bg_color + ';}'
     hl += 'div.azf-input label[for="azfname"]{padding-right:10px;}'
     hl += 'div.azf-button>input[type="button"]{margin-left:10px;}'
-    hl += '</style><div class="azf-box shadow rounded"><form>'
+    hl += '</style><div class="azf-box shadow rounded"><form onsubmit="return false">'
     hl += '<h1 class="azf-color card-body">Who are you?</h1>'
     hl += '<div class="azf-input card-body"><div>'
     hl += '<label for="azfname" class="azf-color"><b style="color:red;">*</b>'
@@ -171,17 +176,21 @@ var awesome_zoom = {
     awesome_zoom.zoomflag = false
   },
   submitName: function() {
-    $('#azf-submit').on('click', () => {
+    $('#azf-submit').on('mousedown', () => {
       var name = $('input[name="azfname"]').val()
       if (!name)
         return awesome_zoom.validationTips(name)
-      // awesome_zoom.removeDialog()
+      awesome_zoom.removeDialog()
       $.ajax({
         url: awesome_zoom.urls_setname,
+        type: 'post',
+        data: {name: name},
         success: function(res) {
-          window.open(awesome_zoom.urls_gettoken+'?name='+name, '', '_blank')
-          console.log(res)
-          awesome_zoom.removeDialog()
+          awesome_zoom.getAccessToken()
+        },
+        error: function(res) {
+          awesome_zoom.getAccessToken()
+          // alert(res.responseJSON.errorMessage)
         }
       })
     })
