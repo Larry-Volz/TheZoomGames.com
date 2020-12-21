@@ -10,5 +10,12 @@
 // +----------------------------------------------------------------------
 use think\facade\Route;
 
-Route::get('wtf', 'index/wtf');
+Route::get('/', 'Index/index');
 Route::get('test', 'index/test');
+Route::post('getUser', 'Index/getUser');
+Route::post('setName', 'Index/setName');
+Route::get('getToken', 'Index/getToken');
+Route::get('refreshToken', 'Index/refreshToken');
+Route::get('createMeeting', 'Index/createMeeting');
+Route::get('match', 'Index/match');
+Route::get('joinMeeting', 'Index/joinMeeting');

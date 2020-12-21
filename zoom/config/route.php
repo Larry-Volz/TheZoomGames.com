@@ -19,7 +19,7 @@ return [
     // 路由是否完全匹配
     'route_complete_match'  => false,
     // 访问控制器层名称
-    'controller_layer'      => 'controller',
+    'controller_layer'      => 'controllers',
     // 空控制器名
     'empty_controller'      => 'Error',
     // 是否使用控制器后缀

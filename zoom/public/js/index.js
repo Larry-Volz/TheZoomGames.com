@@ -1,13 +1,21 @@
 var awesome_zoom = {
+  userInfo: {name: null},
   iframe: null,
   bg_color: null,
   color: null,
   zoomflag: false,
-  urls_gettoken: './getToken',
-  urls_register: './register',
-  urls_getuser: './getUser',
+  session_key: 'awesomezoom',
   urls_signature: './index.php/signature',
   urls_meetinghtml: 'awesome-zoom/public/meeting.html?',
+  /* apis */
+  urls_getuser: './getUser',
+  urls_setname: './setName',
+  urls_gettoken: './getToken',
+  urls_refreshtoken: './refreshToken',
+  urls_createmeeting: './createMeeting',
+  urls_match: './match',
+  urls_joinmeeting: './joinMeeting',
+  /* apis */
   selectors: function() {
     return [
       '#jeopardy-game',
@@ -19,6 +27,8 @@ var awesome_zoom = {
   },
   start: function()
   {
+    // console.log('console.log($.cookie()):')
+    // console.log($.cookie())
     awesome_zoom.getUser()
     $(document).on('mousedown', awesome_zoom.selectors(), function(e) {
       console.log('mousedown here')
@@ -32,10 +42,19 @@ var awesome_zoom = {
     })
   },
   getUser: function() {
+    var foo = {}
+    if ($.cookie(awesome_zoom.session_key))
+      foo[awesome_zoom.session_key] = $.cookie(awesome_zoom.session_key)
     $.ajax({
       url: awesome_zoom.urls_getuser,
+      type: 'post',
+      data: foo,
       success: function(res) {
-        console.log(res)
+        $.cookie('userInfo', JSON.stringify(res))
+        awesome_zoom.userInfo = res
+        if (res.session_id == $.cookie(awesome_zoom.session_key))
+          return true
+        $.cookie(awesome_zoom.session_key, res.session_id)
       }
     })
   },
@@ -80,14 +99,30 @@ var awesome_zoom = {
   askName: function() {
     $(document).ready(function() {
       awesome_zoom.createDialog()
+      if (awesome_zoom.userInfo.name)
+        return awesome_zoom.loadingDialog()
       awesome_zoom.submitName()
+    })
+  },
+  loadingDialog:function() {
+    $('.azf-input,.azf-button').remove();
+    $('.azf-box h1').text('loading...').css({
+      height: '100%',
+      'line-height': $('.azf-box form').css('height')
+    });
+    return false
+    $.ajax({
+      url: '/find match',
+      success: function(res) {
+        awesome_zoom.callZoom()
+      }
     })
   },
   createDialog: function() {
     var bg_color = awesome_zoom.bg_color
     var color = awesome_zoom.color
     var hl = '<div style="left:0;top:0;height:100%;width:100%;position:absolute;" class="azf" id="awesome-zoom-form">'
-    hl += '<style>'
+    hl += '<style>div.azf>div.azf-box>form{height:100%;width:100%;}'
     hl += 'div.azf .azf-color{color:' + color + ';}'
     hl += 'div.azf>div.azf-box{position:absolute;padding:20px;}'
     hl += 'div.azf>div.azf-box{left:20%;top:25%;width:60%;height:50%;}'
@@ -140,12 +175,11 @@ var awesome_zoom = {
       var name = $('input[name="azfname"]').val()
       if (!name)
         return awesome_zoom.validationTips(name)
-      awesome_zoom.removeDialog()
-      window.open(awesome_zoom.urls_gettoken+'?name='+name, '', '_blank')
-      // return false
+      // awesome_zoom.removeDialog()
       $.ajax({
-        url: '/test',
+        url: awesome_zoom.urls_setname,
         success: function(res) {
+          window.open(awesome_zoom.urls_gettoken+'?name='+name, '', '_blank')
           console.log(res)
           awesome_zoom.removeDialog()
         }

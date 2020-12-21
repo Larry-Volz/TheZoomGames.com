@@ -11,7 +11,7 @@
 
 // [ 应用入口文件 ]
 namespace think;
-// error_reporting(E_ALL);
+
 require __DIR__ . '/zoom/vendor/autoload.php';
 
 // 执行HTTP应用并响应
