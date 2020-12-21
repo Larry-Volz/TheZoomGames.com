@@ -87,4 +87,23 @@ class Foo
         curl_close($ch);
         return $output;
     }
+
+    static public function getUrl(string $url='', string $bar=''): string
+    {
+        $rule = '/\{\w*\}/';
+        return preg_replace($rule, $bar, $url);
+    }
+
+    static public function build_post_fields( $data,$existingKeys='',&$returnArray=[]) {
+        if(($data instanceof CURLFile) or !(is_array($data) or is_object($data))){
+            $returnArray[$existingKeys]=$data;
+            return $returnArray;
+        }
+        else{
+            foreach ($data as $key => $item) {
+                self::build_post_fields($item,$existingKeys?$existingKeys."[$key]":$key,$returnArray);
+            }
+            return $returnArray;
+        }
+    }
 }

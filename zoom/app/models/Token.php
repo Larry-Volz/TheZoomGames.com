@@ -6,6 +6,8 @@ use think\Model;
 class Token extends Model
 {
     protected $table = 'oauth_token';
+    const EXP_FRESH = '(`create_time` + `expires`) > UNIX_TIMESTAMP()';
+    const EXP_EXPIRED = '(`create_time` + `expires`) < UNIX_TIMESTAMP()';
 
     public function save(array $data=[], string $sequence=null): bool
     {
@@ -18,38 +20,43 @@ class Token extends Model
     {
         if (empty($data['user_id']))
             return false;
-
         $map['user_id'] = $data['user_id'];
-        $exp = '(`create_time` + `expires`) > UNIX_TIMESTAMP()';
-        $sql = $this->where($map)->whereRaw($exp)->fetchSql(true)->find();
-        dump($sql);
-        if ($this->where($map)->whereRaw($exp)->find())
+        if ($this->where($map)->whereRaw(self::EXP_FRESH)->find())
             return false;
         return true;
     }
 
-    public function saveToken(array $arr=[]): bool
+    static public function saveToken(array $arr=[]): bool
     {
         if (empty($arr))
             return false;
-
-        $user = new User();
-        $map['session_id'] = \app\services\User::getSessionId();
-        $data['user_id'] = $user->where($map)->find()->getData('id');
+        \app\services\Validation::data($arr);
+        $rule['access_token'] = ['require', 642];
+        $rule['refresh_token'] = ['require', 642];
+        $rule['expires_in'] = ['require', 'integer'];
+        if (!\app\services\Validation::validate($rule))
+            return false;
+        $data['user_id'] = User::getUserId();
         $data['token_type'] = $arr['token_type'];
         $data['access_token'] = $arr['access_token'];
         $data['refresh_token'] = $arr['refresh_token'];
         $data['expires'] = $arr['expires_in'];
         $data['create_time'] = $_SERVER['REQUEST_TIME'];
         $tMap['user_id'] = $data['user_id'];
-
-        if ($res = $this->where($tMap)->find())
-            return $this->where($tMap)->save($data);
-        return $this->save($data);
+        $bar = new self();
+        if ($res = $bar->where($tMap)->find())
+            return $bar->where($tMap)->save($data);
+        return $bar->save($data);
     }
 
-    public function getToken()
+    static public function getToken(): string
     {
-        $map['session_id'] = $_COOKIE
+        $bar = new self();
+        $map['user_id'] = User::getUserId();
+        $bar = $bar->where($map)->whereRaw(self::EXP_FRESH);
+        $bar = $bar->field('access_token')->find();
+        if ($bar)
+            return $bar->getData('access_token');
+        return '';
     }
 }

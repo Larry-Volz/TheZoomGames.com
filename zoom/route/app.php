@@ -14,7 +14,7 @@ Route::get('/', 'Index/index');
 Route::get('test', 'index/test');
 Route::post('getUser', 'Index/getUser');
 Route::post('setName', 'Index/setName');
-Route::get('getToken', 'Index/getToken');
+Route::get('requestToken', 'Index/requestToken');
 Route::get('refreshToken', 'Index/refreshToken');
 Route::get('createMeeting', 'Index/createMeeting');
 Route::get('match', 'Index/match');

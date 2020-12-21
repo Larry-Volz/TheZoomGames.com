@@ -11,20 +11,6 @@ class OAuth
 {
     const ZOOM_OAUTH_AUTHORIZE = 'https://zoom.us/oauth/authorize';
     const ZOOM_OAUTH_TOKEN = 'https://zoom.us/oauth/token';
-    static private $authbase = null;
-
-    static private function authorization()
-    {
-        if (self::$authbase === null)
-            self::$authbase = base64_encode(Config::config('ZOOM_CLIENT_ID') . ':' . Config::config('ZOOM_CLIENT_SECRET'));
-        return self::$authbase;
-    }
-
-    static private function authHeader($foo='Basic ')
-    {
-        $bar = self::authorization();
-        return ["Authorization: $foo $bar"];
-    }
 
     /**
      * Step 1: Request User Authorization.
@@ -32,15 +18,12 @@ class OAuth
     static private function authorize()
     {
         $arr[] = 'response_type=code';
-        $arr[] = 'redirect_uri=' . Foo::root() . 'getToken';
+        $arr[] = 'redirect_uri=' . Foo::root() . 'requestToken';
         $arr[] = 'client_id=' . Config::config('ZOOM_CLIENT_ID');
         $url = self::ZOOM_OAUTH_AUTHORIZE . '?' .  implode('&', $arr);
 
-        if (@$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')
-        {
-            Foo::json([
-                'url' => $url
-            ]);
+        if (@$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+            Foo::json(['url' => $url]);
         } else {
             header("Location: $url");
             exit("<script>location.href='$url'</script>");
@@ -50,36 +33,34 @@ class OAuth
     /**
      * Step 2: Request Access Token.
      */
-    public function getToken()
+    public function requestToken()
     {
-        if (1)
+        if (0)
             return false;
         if (Validation::validate(['code' => ['require', 33]]))
         {
             $foo['grant_type'] = 'authorization_code';
             $foo['code'] = $_GET['code'];
-            $foo['redirect_uri'] = Foo::root() . 'getToken';
+            $foo['redirect_uri'] = Foo::root() . 'requestToken';
             $url = self::ZOOM_OAUTH_TOKEN;
-            $res = json_decode(Foo::httpsCurl($url, $foo, self::authHeader()), true);
-            Validation::data($res);
+            $res = json_decode(Foo::httpsCurl($url, $foo, Header::headerBasic()), true);
 
-            if (Validation::validate([
-                'access_token' => ['require', 642],
-                'refresh_token' => ['require', 642],
-                'expires_in' => ['require', 'integer'],
-            ])) {
-                $token = new Token();
-                if ($token->saveToken($res)) {
-                    // create meeting.
-                    dump($res);
-                }
-                dump($token->getLastSql());
+            if (Token::saveToken($res)) {
+                // create meeting.
+                dump('success');
             } else {
-                // dump($res,1,'here');
+                $ret['errorMessage'] = '';
+                $ret['errorCode'] = '';
+                Foo::error($ret);
             }
         } else {
             self::authorize();
         }
+    }
+
+    public function getToken(): string
+    {
+
     }
 
     /**
@@ -89,6 +70,7 @@ class OAuth
     {
         $data['grant_type'] = 'refresh_token';
         $data['refresh_token'] = $YOUR_REFRESH_TOKEN;
-        $res = json_decode(Foo::httpsCurl($url, $data, self::authHeader()), true);
+        $res = json_decode(Foo::httpsCurl($url, $data, Header::headerBasic()), true);
+        Token::saveToken($res);
     }
 }

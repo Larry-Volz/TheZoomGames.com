@@ -10,7 +10,7 @@ var awesome_zoom = {
   /* apis */
   urls_getuser: './getUser',
   urls_setname: './setName',
-  urls_gettoken: './getToken',
+  urls_requesttoken: './requestToken',
   urls_refreshtoken: './refreshToken',
   urls_createmeeting: './createMeeting',
   urls_match: './match',
@@ -26,8 +26,8 @@ var awesome_zoom = {
     .toString()
   },
   getAccessToken: function() {
-    // window.open(awesome_zoom.urls_gettoken+'?name='+name, '', '_blank')
-    window.open(awesome_zoom.urls_gettoken, '', '_blank')
+    // window.open(awesome_zoom.urls_requesttoken+'?name='+name, '', '_blank')
+    window.open(awesome_zoom.urls_requesttoken, '', '_blank')
   },
   start: function()
   {
