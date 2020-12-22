@@ -18,4 +18,4 @@ Route::get('requestToken', 'Index/requestToken');
 Route::get('refreshToken', 'Index/refreshToken');
 Route::get('createMeeting', 'Index/createMeeting');
 Route::get('match', 'Index/match');
-Route::get('joinMeeting', 'Index/joinMeeting');
+Route::post('joinMeeting', 'Index/joinMeeting');

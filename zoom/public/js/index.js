@@ -1,12 +1,16 @@
 var awesome_zoom = {
+  meeting: {
+    id: 85863476618,
+    password: 'wXK323',
+  },
   userInfo: {name: null},
   iframe: null,
   bg_color: null,
   color: null,
   zoomflag: false,
   session_key: 'awesomezoom',
-  urls_signature: './index.php/signature',
-  urls_meetinghtml: 'awesome-zoom/public/meeting.html?',
+  urls_signature: './joinMeeting',
+  urls_meetinghtml: 'zoom/public/meeting.html?',
   /* apis */
   urls_getuser: './getUser',
   urls_setname: './setName',
@@ -25,6 +29,58 @@ var awesome_zoom = {
     ]
     .toString()
   },
+  callZoom: function() {
+    awesome_zoom.zoomflag = true
+    var data = {}
+    var foo = {}
+    data.meetingNumber = awesome_zoom.meeting.id
+    data.role = 0
+    foo.pwd = awesome_zoom.meeting.password
+    foo.mn = data.meetingNumber
+    foo.name = 'lio'
+
+    // foo.role = data.role
+    // foo.lang = 'en-US'
+    // foo.china = 0
+    // foo.email = ''
+
+    if (typeof $.ajax !== 'undefined') {
+      $.ajax({
+        url: awesome_zoom.urls_signature,
+        type: 'post',
+        data: data,
+        success: function(res) {
+          awesome_zoom.appendIframe()
+          foo.apiKey = res.apiKey
+          foo.signature = res.signature
+          var src = awesome_zoom.urls_meetinghtml + awesome_zoom.serialize(foo)
+          $(document).find('#zoom-iframe').attr('src', src)
+          awesome_zoom.zoomflag = false
+        },
+        error: function(res) {
+          console.log(res)
+        }
+      })
+    } else {
+      var xhttp = new XMLHttpRequest()
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          var res = JSON.parse(xhttp.response)
+          awesome_zoom.appendIframe()
+          foo.apiKey = res.apiKey
+          foo.signature = res.signature
+          var src = awesome_zoom.urls_meetinghtml + awesome_zoom.serialize(foo)
+          $(document).find('#zoom-iframe').attr('src', src)
+          awesome_zoom.zoomflag = false
+        }
+      }
+      xhttp.open('POST', awesome_zoom.urls_signature, true)
+      var d = new FormData()
+      for (var k in data)
+        d.append(k, data[k])
+      xhttp.send(d)
+    }
+  },
   getAccessToken: function() {
     // window.open(awesome_zoom.urls_requesttoken+'?name='+name, '', '_blank')
     window.open(awesome_zoom.urls_requesttoken, '', '_blank')
@@ -33,15 +89,15 @@ var awesome_zoom = {
   {
     // console.log('console.log($.cookie()):')
     // console.log($.cookie())
-    awesome_zoom.getUser()
+    // awesome_zoom.getUser()
     $(document).on('mousedown', awesome_zoom.selectors(), function(e) {
-      console.log('mousedown here')
+      // console.log('mousedown here')
       awesome_zoom.bg_color = $(this).css('background-color')
       awesome_zoom.color = $(this).css('color')
       // ask name.
-      awesome_zoom.askName()
+      // awesome_zoom.askName()
       // call zoom.
-      // awesome_zoom.callZoom()
+      awesome_zoom.callZoom()
       // $(this).click()
     })
   },
@@ -194,57 +250,6 @@ var awesome_zoom = {
         }
       })
     })
-  },
-  callZoom: function() {
-    awesome_zoom.zoomflag = true
-    var data = {}
-    var foo = {}
-    data.meetingNumber = 86002890126
-    data.role = 1
-    foo.pwd = 'GFuk5a'
-    foo.role = data.role
-    foo.lang = 'en-US'
-    foo.china = 0
-    foo.mn = data.meetingNumber
-    foo.name = 'lio'
-    foo.email = ''
-
-    if (typeof $.ajax !== 'undefined') {
-      $.ajax({
-        url: awesome_zoom.urls_signature,
-        type: 'post',
-        data: data,
-        success: function(res) {
-          awesome_zoom.appendIframe()
-          foo.apiKey = res.apiKey
-          foo.signature = res.signature
-          var src = awesome_zoom.urls_meetinghtml + awesome_zoom.serialize(foo)
-          $(document).find('#zoom-iframe').attr('src', src)
-          awesome_zoom.zoomflag = false
-        },
-        error: function(res) {
-          console.log(res)
-        }
-      })
-    } else {
-      var xhttp = new XMLHttpRequest()
-      xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-          var res = JSON.parse(xhttp.response)
-          awesome_zoom.appendIframe()
-          foo.apiKey = res.apiKey
-          foo.signature = res.signature
-          var src = awesome_zoom.urls_meetinghtml + awesome_zoom.serialize(foo)
-          $(document).find('#zoom-iframe').attr('src', src)
-          awesome_zoom.zoomflag = false
-        }
-      }
-      xhttp.open('POST', awesome_zoom.urls_signature, true)
-      var d = new FormData()
-      for (var k in data)
-        d.append(k, data[k])
-      xhttp.send(d)
-    }
   }
 }
 

@@ -24,7 +24,7 @@ class Foo
     /**
      * generate signature function from zoom documentation.
      */
-    static public function generateSignature($api_key, $api_secret, $meeting_number, $role)
+    static public function generateSignature($api_key,$api_secret,$meeting_number,$role)
     {
         $time = time() * 1000 - 30000;//time in milliseconds (or close enough)
         $data = base64_encode($api_key . $meeting_number . $time . $role);

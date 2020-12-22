@@ -7,7 +7,7 @@ use \Uncgits\ZoomApi\Clients\Meetings;
 use \Uncgits\ZoomApi\Adapters\Guzzle;
 use \Uncgits\ZoomApi\ZoomApi as UncgitsZoomApi;
 
-class ZoomApi extends ZoomApiConfig
+class Zoom extends ZoomApiConfig
 {
     public function __construct()
     {
@@ -26,7 +26,7 @@ class ZoomApi extends ZoomApiConfig
         // more likely, you'll write your own method here that calls either $this->refreshToken() or $this->setJwt() depending on whether you determine you need a new token. that logic is up to you!
     }
 
-    static public function zoom($client=Meetings::class): UncgitsZoomApi
+    static public function api($client=Meetings::class): UncgitsZoomApi
     {
         return new UncgitsZoomApi([
             'client' => $client,

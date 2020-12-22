@@ -2,56 +2,32 @@
 namespace app\services;
 
 use app\models\Config;
+use \Uncgits\ZoomApi\Clients\Meetings;
 
 class Meeting
 {
     const ZOOM_USERS_MEETINGS = '/users/{userId}/meetings';
     const ZOOM_MEETING_TYPE = ['scheduled', 'live', 'upcoming'];
 
-    static public function queryMeeting(): array
+    static public function queryMeeting()
     {
-dump(self::class.'::queryMeeting()');
-hr();
-        $zoom = ZoomApi::zoom(\Uncgits\ZoomApi\Clients\Users::class);
-        dump(current($zoom->listUsers()->content()));
-        return [];
-        $user = ZoomUser::user();
-        if (empty($user))
-            return [];
-        $url = Foo::getUrl(self::ZOOM_USERS_MEETINGS, $user['id']);
-        $data['type'] = 'scheduled';
-        foreach (self::ZOOM_MEETING_TYPE as $key => $value) {
-            $data['type'] = $value;
-            $basic[] = json_decode(Foo::httpsCurl($url, $data, Header::headerBasic()), true);
-            $bearer[] = json_decode(Foo::httpsCurl($url, $data, Header::headerBearer()), true);
-            # code...
-        }
-        dump($user);
-        dump($basic);
-        dump($bearer);
-        return [];
-        //
+        $user = User::user();
+        $zoom = Zoom::api(Meetings::class);
+        return current($zoom->listMeetings($user->id)->content());
     }
 
     static public function createMeetings()
     {
 dump(self::class.'::createMeetings()');
 hr();
-        $user = ZoomUser::user();
-        if (empty($user))
-            return [];
-dump($user);
-exit;
-        $url = Foo::getUrl(self::ZOOM_USERS_MEETINGS, $user['id']);
-dump($url);
-        $data['topic'] = $user['first_name'].'\'s meeting';
-        $data['type'] = 3;
-        $data['start_time'] = date('Y-m-d H:i:s');
-        $data['duration'] = 24*60*60;
-        // $data = Foo::build_post_fields(self::foo());
-        $curl = Foo::httpsCurl($url, $data, Header::headerBearer());
-        $res = json_decode($curl, true);
-        dump($data);
+        $user = User::user();
+        $zoom = Zoom::api(Meetings::class);
+        $meeting['topic'] = $user->first_name.'\'s meeting';
+        $meeting['type'] = 3;
+        $meeting['start_time'] = date('Y-m-d H:i:s');
+        $meeting['duration'] = 24*60*60;
+        $zoom->setParameters($meeting);
+        $res = $zoom->createMeeting($user->id)->content();
         dump($res);
     }
 

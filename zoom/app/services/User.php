@@ -2,17 +2,38 @@
 namespace app\services;
 
 use app\models\User as UserModel;
+use \Uncgits\ZoomApi\Clients\Users;
 // use app\services\Foo;
 
 class User
 {
     const CKEY = 'awesomezoom';
+    const ZOOM_BASE = 'https://api.zoom.us/v2';
+    const ZOOM_USERS = 'https://api.zoom.us/v2/users';
     private $user = null;
 
     public function __construct()
     {
         if ($this->user === null)
             $this->user = new UserModel();
+    }
+
+    // zoom users
+    static public function users(bool $one=false): array
+    {
+        $res = json_decode(Foo::httpsCurl(self::ZOOM_USERS, null, Header::headerBearer()), true);
+        if (empty($res['users']))
+            return [];
+        if ($one === true)
+            return $res['users'][0];
+        return $res;
+    }
+
+    // zoom user
+    static public function user()
+    {
+        $zoom = Zoom::api(Users::class);
+        return current($zoom->listUsers()->content());
     }
 
     public function getUser()

@@ -1,8 +1,0 @@
-/.idea
-/.vscode
-/vendor
-*.log
-.env
-
-/_del
-/think

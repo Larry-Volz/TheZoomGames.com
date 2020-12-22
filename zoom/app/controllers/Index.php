@@ -13,14 +13,15 @@ class Index extends BaseController
         // header('Location: /index.html');
         // exit;
 /*
-        $uarr = \app\services\ZoomUser::user();
+        $uarr = \app\services\User::user();
         if ($uarr) {
-            $foo = \app\services\ZoomApi::zoom();
+            $foo = \app\services\Zoom::api();
             dump($foo->listMeetings($uarr['id']));
         }
 */
-        \app\services\Meeting::queryMeeting();
-        \app\services\Meeting::createMeetings();
+        dump(\app\services\User::user());
+        dump(\app\services\Meeting::queryMeeting());
+        dump(\app\services\Meeting::createMeetings());
         exit;
     }
 
