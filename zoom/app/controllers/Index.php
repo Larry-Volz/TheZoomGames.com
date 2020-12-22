@@ -7,13 +7,20 @@ class Index extends BaseController
 {
     public function index()
     {
+        dump(self::class.'index()');
         // get user info and register session id
         // return redirect('/index.html');
-        // \app\services\ZoomUser::users();
+        // header('Location: /index.html');
+        // exit;
+/*
+        $uarr = \app\services\ZoomUser::user();
+        if ($uarr) {
+            $foo = \app\services\ZoomApi::zoom();
+            dump($foo->listMeetings($uarr['id']));
+        }
+*/
         \app\services\Meeting::queryMeeting();
         \app\services\Meeting::createMeetings();
-        exit;
-        header('Location: /index.html');
         exit;
     }
 

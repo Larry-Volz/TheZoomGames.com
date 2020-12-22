@@ -10,7 +10,14 @@ class Meeting
 
     static public function queryMeeting(): array
     {
+dump(self::class.'::queryMeeting()');
+hr();
+        $zoom = ZoomApi::zoom(\Uncgits\ZoomApi\Clients\Users::class);
+        dump(current($zoom->listUsers()->content()));
+        return [];
         $user = ZoomUser::user();
+        if (empty($user))
+            return [];
         $url = Foo::getUrl(self::ZOOM_USERS_MEETINGS, $user['id']);
         $data['type'] = 'scheduled';
         foreach (self::ZOOM_MEETING_TYPE as $key => $value) {
@@ -28,13 +35,21 @@ class Meeting
 
     static public function createMeetings()
     {
+dump(self::class.'::createMeetings()');
+hr();
         $user = ZoomUser::user();
+        if (empty($user))
+            return [];
+dump($user);
+exit;
         $url = Foo::getUrl(self::ZOOM_USERS_MEETINGS, $user['id']);
+dump($url);
         $data['topic'] = $user['first_name'].'\'s meeting';
         $data['type'] = 3;
         $data['start_time'] = date('Y-m-d H:i:s');
         $data['duration'] = 24*60*60;
-        $curl = Foo::httpsCurl($url, Foo::build_post_fields(self::foo()), Header::headerBearer());
+        // $data = Foo::build_post_fields(self::foo());
+        $curl = Foo::httpsCurl($url, $data, Header::headerBearer());
         $res = json_decode($curl, true);
         dump($data);
         dump($res);

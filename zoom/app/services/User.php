@@ -29,7 +29,7 @@ class User
         $data['create_time'] = time();
         $res = $this->user->save($data);
 
-        if (@$res) {
+        if (!empty($res)) {
             setcookie(self::CKEY, $data['session_id']);
             return ['session_id' => $data['session_id']];
         }
@@ -80,6 +80,7 @@ class User
             return $_POST[self::CKEY];
         if (!empty($_GET[self::CKEY]))
             return $_GET[self::CKEY];
+        return '';
     }
 
     static public function getSessionId(): string

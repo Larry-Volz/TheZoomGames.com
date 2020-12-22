@@ -67,7 +67,7 @@ class Foo
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        if ($foo = GV('_COOKIE', 'PHPSESSID'))
+        if (!empty($_COOKIE['PHPSESSID']) && $foo = $_COOKIE['PHPSESSID'])
             curl_setopt($ch, CURLOPT_COOKIE, "PHPSESSID=$foo");
 
         if (!empty($data)) {

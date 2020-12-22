@@ -47,7 +47,7 @@ class OAuth
 
             if (Token::saveToken($res)) {
                 // create meeting.
-                dump('success');
+                dump('save token success');
             } else {
                 $ret['errorMessage'] = '';
                 $ret['errorCode'] = '';

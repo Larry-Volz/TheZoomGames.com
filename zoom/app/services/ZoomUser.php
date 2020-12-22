@@ -9,9 +9,8 @@ class ZoomUser
     static public function users(bool $one=false): array
     {
         $res = json_decode(Foo::httpsCurl(self::ZOOM_USERS, null, Header::headerBearer()), true);
-        if (!$res)
+        if (empty($res['users']))
             return [];
-
         if ($one === true)
             return $res['users'][0];
         return $res;
