@@ -3,23 +3,25 @@ namespace app\services;
 
 use app\models\User as UserModel;
 use \Uncgits\ZoomApi\Clients\Users;
-// use app\services\Foo;
 
 class User
 {
     const CKEY = 'awesomezoom';
     const ZOOM_BASE = 'https://api.zoom.us/v2';
     const ZOOM_USERS = 'https://api.zoom.us/v2/users';
-    private $user = null;
+    private static $userModel = null;
+    private static $session_id = '';
+    private static $zoomUser = null;
 
-    public function __construct()
+    private static function userModel()
     {
-        if ($this->user === null)
-            $this->user = new UserModel();
+        if (self::$userModel === null)
+            self::$userModel = new UserModel;
+        return self::$userModel;
     }
 
     // zoom users
-    static public function users(bool $one=false): array
+    public static function users(bool $one=false): array
     {
         $res = json_decode(Foo::httpsCurl(self::ZOOM_USERS, null, Header::headerBearer()), true);
         if (empty($res['users']))
@@ -30,70 +32,71 @@ class User
     }
 
     // zoom user
-    static public function user()
+    public static function user()
     {
+        if (self::$zoomUser)
+            return self::$zoomUser;
         $zoom = Zoom::api(Users::class);
-        return current($zoom->listUsers()->content());
+        $zoom = $zoom->listUsers();
+        if ($zoom->status() !== 'success')
+            return false;
+        self::$zoomUser = current($zoom->content());
+        return self::$zoomUser;
     }
 
-    public function getUser()
+    public static function getUser()
     {
-        $map['session_id'] = $this->hasSessionId();
+        if (self::$session_id)
+            return ['session_id' => self::$session_id];
+        $bar = self::userModel();
 
-        if (!empty($map)) {
-            $res = $this->user->where($map)->findOrEmpty();
-            if (!$res->isEmpty())
-                return $res->getData();
+        if ($map['session_id'] = self::hasSessionId()) {
+            $bar = $bar->where($map)->findOrEmpty();
+            if (!$bar->isEmpty()) {
+                self::$session_id = $bar->getData('session_id');
+                return ['session_id' => self::$session_id];
+            }
         }
 
         $data['session_id'] = self::genSessionId();
         $data['create_time'] = time();
-        $res = $this->user->save($data);
+        $bar = $bar->save($data);
 
-        if (!empty($res)) {
+        if (!empty($bar)) {
             setcookie(self::CKEY, $data['session_id']);
+            self::$session_id = $data['session_id'];
             return ['session_id' => $data['session_id']];
         }
     }
 
     public function setName()
     {
-        if (!$sid = $this->hasSessionId()) {
-            $ret['errorCode'] = 1002;
-            $ret['errorMessage'] = 'something wrong, try again.';
-            Foo::error($ret);
-        }
-
-        if (empty($_POST['name'])) {
-            $ret['errorCode'] = 1003;
-            $ret['errorMessage'] = 'name required!';
-            Foo::error($ret);
-        }
-
+        $bar = self::userModel();
+        if (!$sid = self::hasSessionId())
+            Foo::error('something wrong, try again.', 1002);
+        if (empty($_POST['name']))
+            Foo::error('name required!', 1003);
         $map['session_id'] = $sid;
         $data['name'] = $_POST['name'];
         return true;
-        $res = $this->user->where($map)->save($data);
-        if (!empty($res))
+        $bar = $bar->where($map)->save($data);
+        if (!empty($bar))
             setcookie(self::CKEY, $map['session_id']);
-        else {
-            $ret['errorCode'] = 1004;
-            $ret['errorMessage'] = 'Failed to save data!';
-            Foo::error($ret);
-        }
-
+        else
+            Foo::error('Failed to save data!', 1004);
         return $data;
     }
 
-    static public function genSessionId() {
+    public static function genSessionId()
+    {
         $res = md5(time().rand(1000,9999));
-        $foo = new self();
-        if ($foo->user->field('id')->where(['session_id'=>$res])->find())
+        $foo = new self::$userModel;
+        if ($foo->field('id')->where(['session_id'=>$res])->find())
             return self::genSessionId();
         return $res;
     }
 
-    static public function hasSessionId(): string
+    public static function hasSessionId(): string
     {
         if (!empty($_COOKIE[self::CKEY]))
             return $_COOKIE[self::CKEY];
@@ -104,11 +107,14 @@ class User
         return '';
     }
 
-    static public function getSessionId(): string
+    public static function getSessionId(): string
     {
-        $foo = new self();
+        if (self::$session_id)
+            return self::$session_id;
+        $foo = self::userModel();
         if ($map['session_id'] = self::hasSessionId())
-            return $foo->user->field('session_id')->where($map)->find()->getData('session_id');
-        return '';
+            if ($foo = $foo->field('session_id')->where($map)->find())
+                self::$session_id = $foo->getData('session_id');
+        return self::$session_id;
     }
 }

@@ -10,15 +10,21 @@ class Foo
         die(json_encode($data));
     }
 
-    static public function error($data=[])
+    static public function error($msg=null, $code=1000)
     {
         $protocol = 'HTTP/1.0';
         if (isset($_SERVER['SERVER_PROTOCOL']))
             $protocol = $_SERVER['SERVER_PROTOCOL'];
-        header("$protocol ${data['errorCode']} ${data['errorMessage']}");
-        http_response_code($data['errorCode']);
-        header("Status: ${data['errorMessage']}");
-        die(self::json($data));
+        $str = $msg;
+        if (is_array($msg))
+            $str = !is_array(current($msg)) ? current($msg) : json_encode($msg);
+        header("$protocol $code $str");
+        http_response_code($code);
+        header("Status: $str");
+        die(self::json([
+            'errorMessage' => $msg,
+            'errorCode' => $code
+        ]));
     }
 
     /**

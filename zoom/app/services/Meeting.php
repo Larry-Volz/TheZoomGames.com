@@ -2,36 +2,86 @@
 namespace app\services;
 
 use app\models\Config;
+use app\models\Meeting as MeetingModel;
+use app\models\User as UserModel;
 use \Uncgits\ZoomApi\Clients\Meetings;
 
 class Meeting
 {
     const ZOOM_USERS_MEETINGS = '/users/{userId}/meetings';
     const ZOOM_MEETING_TYPE = ['scheduled', 'live', 'upcoming'];
+    private static $savedMeeting = null;
 
-    static public function queryMeeting()
+    private static function checkSavedMeeting()
     {
-        $user = User::user();
+        if (self::$savedMeeting)
+            return self::$savedMeeting;
+        $foo = MeetingModel::getMeeting();
+        if (!$foo['meeting_id'])
+            return self::$savedMeeting;
         $zoom = Zoom::api(Meetings::class);
-        return current($zoom->listMeetings($user->id)->content());
+        $foo = $zoom->getMeeting($foo['meeting_id']);
+        if (!Zoom::status($foo))
+            return self::$savedMeeting;
+        self::$savedMeeting = $foo->content();
+        return self::$savedMeeting;
     }
 
-    static public function createMeetings()
+    // query first meeting from meeting list.
+    public static function queryMeeting()
     {
-dump(self::class.'::createMeetings()');
-hr();
+        if (self::checkSavedMeeting())
+            return self::checkSavedMeeting();
         $user = User::user();
+        if (!$user)
+            return [];
         $zoom = Zoom::api(Meetings::class);
-        $meeting['topic'] = $user->first_name.'\'s meeting';
-        $meeting['type'] = 3;
-        $meeting['start_time'] = date('Y-m-d H:i:s');
-        $meeting['duration'] = 24*60*60;
-        $zoom->setParameters($meeting);
-        $res = $zoom->createMeeting($user->id)->content();
-        dump($res);
+        $res = $zoom->listMeetings($user->id);
+        if (!Zoom::status($res))
+            return [];
+        $res = $res->content();
+        if (!$res)
+            return $res;
+        $res = current($res);
+        return $zoom->getMeeting($res->id)->content();
     }
 
-    public function joinMeeting()
+    private static function configMeeting(): array
+    {
+        $user = User::user();
+        if (!User::user())
+            return [];
+        return [
+            'topic' => User::user()->first_name . '\'s meeting',
+            'type' => 3,
+            'start_time' => date('Y-m-d H:i:s'),
+            'duration' => 24 * 60 * 60,
+            'settings' => [
+                'host_video' => true,
+                'participant_video' => true,
+                'join_before_host' => true,
+                'use_pmi' => true
+            ]
+        ];
+    }
+
+    public static function createMeetings()
+    {
+        if (self::checkSavedMeeting())
+            return self::checkSavedMeeting();
+        if (!UserModel::getUserId())
+            return false;
+        if (!User::user())
+            return false;
+        $zoom = Zoom::api(Meetings::class);
+        $zoom->setParameters(self::configMeeting());
+        $request = $zoom->createMeeting(User::user()->id);
+        if (!Zoom::status($request))
+            return false;
+        return MeetingModel::saveMeeting($request->content());
+    }
+
+    public static function joinMeeting()
     {
         if (Validation::validate([
             'meetingNumber' => ['require', 'integer'],
@@ -50,7 +100,7 @@ hr();
         }
     }
 
-    static public function foo()
+    public static function foo()
     {
         return [
           "topic"=> "string",

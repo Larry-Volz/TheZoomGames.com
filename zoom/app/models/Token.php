@@ -30,11 +30,11 @@ class Token extends Model
     {
         if (empty($arr))
             return false;
-        \app\services\Validation::data($arr);
-        $rule['access_token'] = ['require', 642];
-        $rule['refresh_token'] = ['require', 642];
+        $rule['access_token'] = ['require'];
+        $rule['refresh_token'] = ['require'];
         $rule['expires_in'] = ['require', 'integer'];
-        if (!\app\services\Validation::validate($rule))
+        $rule['token_type'] = ['require'];
+        if (!\app\services\Validation::validate($rule, $arr))
             return false;
         $data['user_id'] = User::getUserId();
         $data['token_type'] = $arr['token_type'];
@@ -42,21 +42,31 @@ class Token extends Model
         $data['refresh_token'] = $arr['refresh_token'];
         $data['expires'] = $arr['expires_in'];
         $data['create_time'] = $_SERVER['REQUEST_TIME'];
-        $tMap['user_id'] = $data['user_id'];
-        $bar = new self();
-        if ($res = $bar->where($tMap)->find())
-            return $bar->where($tMap)->save($data);
+        $map['user_id'] = $data['user_id'];
+        $bar = new self;
+        if ($res = $bar->where($map)->find())
+            return $bar->where($map)->save($data);
         return $bar->save($data);
     }
 
-    static public function getToken(): string
+    static private function getTokens(string $field='access_token'): string
     {
-        $bar = new self();
+        $bar = new self;
         $map['user_id'] = User::getUserId();
         $bar = $bar->where($map)->whereRaw(self::EXP_FRESH);
         $bar = $bar->field('access_token')->find();
         if ($bar)
             return $bar->getData('access_token');
         return '';
+    }
+
+    static public function getToken(): string
+    {
+        return self::getTokens('access_token');
+    }
+
+    static public function getRefreshToken(): string
+    {
+        return self::getTokens('refresh_token');
     }
 }

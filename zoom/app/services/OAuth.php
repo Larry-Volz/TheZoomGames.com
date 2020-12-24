@@ -33,10 +33,8 @@ class OAuth
     /**
      * Step 2: Request Access Token.
      */
-    public function requestToken()
+    static public function requestToken()
     {
-        if (0)
-            return false;
         if (Validation::validate(['code' => ['require', 33]]))
         {
             $foo['grant_type'] = 'authorization_code';
@@ -44,33 +42,34 @@ class OAuth
             $foo['redirect_uri'] = Foo::root() . 'requestToken';
             $url = self::ZOOM_OAUTH_TOKEN;
             $res = json_decode(Foo::httpsCurl($url, $foo, Header::headerBasic()), true);
-
-            if (Token::saveToken($res)) {
-                // create meeting.
-                dump('save token success');
-            } else {
-                $ret['errorMessage'] = '';
-                $ret['errorCode'] = '';
-                Foo::error($ret);
-            }
+            return self::tokenResult(Token::saveToken($res));
         } else {
             self::authorize();
         }
     }
 
-    public function getToken(): string
-    {
-
-    }
-
     /**
      * Refresh token
      */
-    public function refreshToken()
+    static public function refreshToken()
     {
         $data['grant_type'] = 'refresh_token';
-        $data['refresh_token'] = $YOUR_REFRESH_TOKEN;
+        $data['refresh_token'] = Token::getRefreshToken();
         $res = json_decode(Foo::httpsCurl($url, $data, Header::headerBasic()), true);
-        Token::saveToken($res);
+        return self::tokenResult(Token::saveToken($res));
+    }
+
+    /**
+     * for
+     * self::requestToken()
+     * self::refreshToken()
+     */
+    static private function tokenResult($var)
+    {
+        $trrule = ['app'=>'view', '\\'=>'/'];
+        if ($var)
+            return strtr(__DIR__, $trrule) . '/OAuth/success.html';
+        else
+            return strtr(__DIR__, $trrule) . '/OAuth/fail.html';
     }
 }

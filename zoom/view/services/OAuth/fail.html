@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FAIL</title>
+</head>
+<body>
+  <h1>FAIL</h1>
+  <h1>
+    <span>Will close in</span>
+    <span id="countdown">3</span>
+  </h1>
+
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script type="text/javascript">
+    setInterval(function() {
+      if ($('#countdown').text() == 0)
+        window.close()
+      $('#countdown').text($('#countdown').text()-1)
+    }, 1000)
+  </script>
+</body>
+</html>

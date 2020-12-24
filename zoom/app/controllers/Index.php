@@ -12,26 +12,12 @@ class Index extends BaseController
         // return redirect('/index.html');
         // header('Location: /index.html');
         // exit;
-/*
-        $uarr = \app\services\User::user();
-        if ($uarr) {
-            $foo = \app\services\Zoom::api();
-            dump($foo->listMeetings($uarr['id']));
-        }
-*/
-        dump(\app\services\User::user());
-        dump(\app\services\Meeting::queryMeeting());
+        // dump(\app\services\Meeting::queryMeeting());
         dump(\app\services\Meeting::createMeetings());
-        exit;
     }
 
-    public function test() {
-        $obj = new \app\models\Config();
-        // dump($obj->config('ZOOM_API_KEY').time());
-        // dump($obj->config('ZOOM_API_KEY_1', 'ZOOM_API_KEY_1'));
-        exit;
-        $u = new \app\services\User();
-        return json($u->getUser());
+    public function queryLangs() {
+        return json(\app\services\Zoom::langs());
     }
 
     public function getUser() {
@@ -44,9 +30,13 @@ class Index extends BaseController
         return json($foo->setName());
     }
 
+    public function joinMeeting() {
+        $meeting = new \app\services\Meeting();
+        return json($meeting->joinMeeting());
+    }
+
     public function requestToken() {
-        $oauth = new \app\services\OAuth();
-        $oauth->requestToken();
+        return \think\facade\View::fetch(\app\services\OAuth::requestToken());
     }
 
     public function refreshToken() {
@@ -54,18 +44,8 @@ class Index extends BaseController
         $oauth->refreshToken();
     }
 
-    public function createMeeting() {
-        $foo = new \app\services\Meeting();
-        return json($foo->createMeeting());
-    }
-
     public function match() {
         $foo = new \app\services\Meeting();
         return json($foo->match());
-    }
-
-    public function joinMeeting() {
-        $meeting = new \app\services\Meeting();
-        return json($meeting->joinMeeting());
     }
 }

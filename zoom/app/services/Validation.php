@@ -36,8 +36,10 @@ class Validation
     /**
      * check field rule.
      */
-    static private function validation($val, $rule)
+    static private function validation($val=null, $rule=null)
     {
+        if (func_num_args() !== 2)
+            return true;
         switch ($rule) {
             case is_integer($rule):
                 return (strlen($val) === $rule);
@@ -63,7 +65,7 @@ class Validation
      */
     static private function regex($value=null, $rule=null)
     {
-        if ($value === null || $rule === null)
+        if (func_num_args() !== 2)
             return true;
         $validate = array(
             'require'   => '/\S+/',

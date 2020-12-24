@@ -5,11 +5,18 @@ use think\Model;
 
 class User extends Model
 {
+    private static $id = 0;
+
     static public function getUserId(): int
     {
-        $foo = new self();
-        return $foo->where([
+        if (self::$id)
+            return self::$id;
+        $foo = new self;
+        $foo = $foo->where([
             'session_id' => \app\services\User::getSessionId()
-        ])->find()->getData('id');
+        ])->find();
+        if ($foo)
+            self::$id = $foo->getData('id');
+        return self::$id;
     }
 }
