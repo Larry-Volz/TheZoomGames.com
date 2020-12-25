@@ -26,7 +26,7 @@ class Zoom extends ZoomApiConfig
         // OR, set one yourself:
 
         // ... code that fetches a stored token value from a database or something...
-        $this->setJwt(Token::getToken());
+        $this->setJwt(OauthToken::getToken());
 
         // more likely, you'll write your own method here that calls either $this->refreshToken() or $this->setJwt() depending on whether you determine you need a new token. that logic is up to you!
     }

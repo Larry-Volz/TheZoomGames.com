@@ -46,7 +46,7 @@ class OAuth
             $foo['redirect_uri'] = Foo::root() . 'requestToken';
             $url = self::ZOOM_OAUTH_TOKEN;
             $res = json_decode(Foo::httpsCurl($url, $foo, Header::headerBasic()), true);
-            return self::tokenResult(Token::saveToken($res));
+            return self::tokenResult(OauthToken::saveToken($res));
         } else {
             self::authorize();
         }
@@ -58,9 +58,9 @@ class OAuth
     static public function refreshToken()
     {
         $data['grant_type'] = 'refresh_token';
-        $data['refresh_token'] = Token::getRefreshToken();
+        $data['refresh_token'] = OauthToken::getRefreshToken();
         $res = json_decode(Foo::httpsCurl($url, $data, Header::headerBasic()), true);
-        return self::tokenResult(Token::saveToken($res));
+        return self::tokenResult(OauthToken::saveToken($res));
     }
 
     /**

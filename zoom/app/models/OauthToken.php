@@ -3,7 +3,7 @@ namespace app\models;
 
 use think\Model;
 
-class Token extends Model
+class OauthToken extends Model
 {
     protected $table = 'zoom_oauth_token';
     const EXP_FRESH = '(`create_time` + `expires`) > UNIX_TIMESTAMP()';

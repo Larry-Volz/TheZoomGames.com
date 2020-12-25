@@ -26,6 +26,6 @@ class Header
 
     static public function headerBearer(): array
     {
-        return ['Authorization: Bearer ' . \app\models\Token::getToken()];
+        return ['Authorization: Bearer ' . \app\models\OauthToken::getToken()];
     }
 }
