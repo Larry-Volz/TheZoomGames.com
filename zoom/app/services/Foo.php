@@ -7,6 +7,7 @@ class Foo
     {
         header_remove();
         header('Content-type: Application/json');
+        ob_get_clean();
         die(json_encode($data));
     }
 
@@ -21,6 +22,7 @@ class Foo
         header("$protocol $code $str");
         http_response_code($code);
         header("Status: $str");
+        ob_get_clean();
         die(self::json([
             'errorMessage' => $msg,
             'errorCode' => $code
