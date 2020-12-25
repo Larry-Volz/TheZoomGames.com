@@ -12,18 +12,20 @@ ZoomMtg.setZoomJSLib('https://dmogdx0jrul3u.cloudfront.net/1.8.3/lib', '/av')
 ZoomMtg.preLoadWasm()
 ZoomMtg.prepareJssdk()
 joinMeeting(parseQuery())
-function joinMeeting(gmc)
+function joinMeeting(data)
 {
   ZoomMtg.init({
     leaveUrl: './thanks.html',
     isSupportAV: true,
     success: function() {
       ZoomMtg.join({
-        signature: gmc.signature,
-        apiKey: gmc.apiKey,
-        meetingNumber: gmc.mn,
-        userName: gmc.name,
-        passWord: gmc.pwd,
+        apiKey: data.apikey,
+        china: data.china,
+        lang: data.lang,
+        meetingNumber: data.meetingId,
+        passWord: data.password,
+        signature: data.signature,
+        userName: data.name,
         error: function(res) {
           console.clear()
           // console.log(res)

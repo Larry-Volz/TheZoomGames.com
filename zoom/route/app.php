@@ -13,10 +13,13 @@ use think\facade\Route;
 Route::get('/', 'Index/index');
 Route::get('test', 'index/test');
 Route::post('getUser', 'Index/getUser');
+Route::post('startZoom', 'Index/startZoom');
+Route::get('checkWaiting', 'Index/checkWaiting');
+Route::get('requestToken', 'Index/requestToken');
+Route::get('refreshToken', 'Index/refreshToken');
+
 Route::post('setName', 'Index/setName');
 Route::post('match', 'Index/match');
 Route::get('queryLangs', 'Index/queryLangs');
-Route::get('requestToken', 'Index/requestToken');
-Route::get('refreshToken', 'Index/refreshToken');
 Route::get('createMeeting', 'Index/createMeeting');
 Route::post('joinMeeting', 'Index/joinMeeting');

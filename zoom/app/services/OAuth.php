@@ -23,9 +23,13 @@ class OAuth
         $url = self::ZOOM_OAUTH_AUTHORIZE . '?' .  implode('&', $arr);
 
         if (@$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
-            Foo::json(['url' => $url]);
+            // Foo::json(['url' => $url]);
+            $error['msg'] = 'no access token';
+            $error['url'] = $url;
+            $error['_POST'] = $_POST;
+            Foo::error($error, 1010);
         } else {
-            header("Location: $url");
+            exit(header("Location: $url"));
             exit("<script>location.href='$url'</script>");
         }
     }

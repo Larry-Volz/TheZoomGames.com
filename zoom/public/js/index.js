@@ -6,22 +6,21 @@ var zoom = {
   matchFrequency: 1000,
   langs: null,
   lang: null,
-  meeting: {
-    id: 85863476618,
-    password: 'wXK323',
-  },
   userInfo: {name: null},
   iframe: null,
   bg_color: null,
   color: null,
   zoomflag: false,
   session_key: 'awesomezoom',
-  urls_signature: './joinMeeting',
   urls_meetinghtml: 'zoom/public/meeting.html?',
   /* apis */
-  urls_match: './match',
   urls_querylangs: './queryLangs',
   urls_getuser: './getUser',
+  urls_signature: './joinMeeting',
+  urls_startzoom: './startZoom',
+  urls_checkwaiting: './checkWaiting',
+
+  urls_match: './match',
   urls_setname: './setName',
   urls_requesttoken: './requestToken',
   urls_refreshtoken: './refreshToken',
@@ -36,80 +35,35 @@ var zoom = {
       '#connect4-game'
     ].toString()
   },
-  getAccessToken: function() {
+  zoomflagToggle: function() {
+    zoom.zoomflag = !zoom.zoomflag
+    return zoom.zoomflag
+  },
+  xhrData: function(data) {
+    var d = new FormData()
+    for (var k in data)
+      d.append(k, data[k])
+    return d
+  },
+  getAccessToken: function(url) {
+    if (url)
+      window.open(url, '', '_blank')
     window.open(zoom.urls_requesttoken, '', '_blank')
   },
   start: function()
   {
     zoom.queryLangs()
     $(document).on('mousedown', zoom.selectors(), function(e) {
+      if (zoom.zoomflag === true)
+        return true
       // console.log('mousedown here')
       console.clear()
       zoom.game = $(this).attr('id')
-      zoom.getUser()
-      zoom.askName()
       zoom.bg_color = $(this).css('background-color')
       zoom.color = $(this).css('color')
-      // ask name.
-      // zoom.askName()
-      // call zoom.
-      // zoom.callZoom()
-      // $(this).click()
+      zoom.getUser()
+      zoom.createDialog()
     })
-  },
-  callZoom: function() {
-    zoom.zoomflag = true
-    var data = {}
-    var foo = {}
-    data.meetingNumber = zoom.meeting.id
-    data.role = 0
-    foo.pwd = zoom.meeting.password
-    foo.mn = data.meetingNumber
-    foo.name = 'lio'
-
-    // foo.role = data.role
-    // foo.lang = 'en-US'
-    // foo.china = 0
-    // foo.email = ''
-
-    if (typeof $.ajax !== 'undefined') {
-      $.ajax({
-        url: zoom.urls_signature,
-        type: 'post',
-        data: data,
-        success: function(res) {
-          zoom.appendIframe()
-          foo.apiKey = res.apiKey
-          foo.signature = res.signature
-          var src = zoom.urls_meetinghtml + zoom.serialize(foo)
-          $(document).find('#zoom-iframe').attr('src', src)
-          zoom.zoomflag = false
-          zoom.changeGamePanelStyle()
-        },
-        error: function(res) {
-          console.log(res)
-        }
-      })
-    } else {
-      var xhttp = new XMLHttpRequest()
-      xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-          var res = JSON.parse(xhttp.response)
-          zoom.appendIframe()
-          foo.apiKey = res.apiKey
-          foo.signature = res.signature
-          var src = zoom.urls_meetinghtml + zoom.serialize(foo)
-          $(document).find('#zoom-iframe').attr('src', src)
-          zoom.zoomflag = false
-          zoom.changeGamePanelStyle()
-        }
-      }
-      xhttp.open('POST', zoom.urls_signature, true)
-      var d = new FormData()
-      for (var k in data)
-        d.append(k, data[k])
-      xhttp.send(d)
-    }
   },
   getUser: function() {
     var foo = {}
@@ -129,6 +83,8 @@ var zoom = {
     })
   },
   genIframe: function() {
+    if (zoom.iframe !== null)
+      return zoom.iframe
     zoom.iframe = document.createElement('iframe')
     zoom.iframe.style.border='none'
     zoom.iframe.style.padding=0
@@ -163,11 +119,6 @@ var zoom = {
       $(document).find('head').append(style)
     })
   },
-  askName: function() {
-    $(document).ready(function() {
-      zoom.createMatchdialog()
-    })
-  },
   loadingDialog:function() {
     if (!zoom.userInfo.name)
       return false
@@ -184,7 +135,7 @@ var zoom = {
       }
     })
   },
-  createMatchdialog: function() {
+  createDialog: function() {
     var bg_color = zoom.bg_color
     var color = zoom.color
     var hl = '<div style="left:0;top:0;height:100%;width:100%;position:absolute;" class="azf" id="zoom-form">'
@@ -214,7 +165,7 @@ var zoom = {
     // hl += '      <input class="azf-color" type="button" id="azf-cancle" value="Cancle">'
     // hl += '    </div>'
     hl += '    <div class="azf-button card-body">'
-    hl += '      <button>Start Zoom</button>'
+    hl += '      <button id="startZoom">Start Zoom</button>'
     hl += '    </div>'
     hl += '  </div>'
     hl += '</div>'
@@ -225,15 +176,21 @@ var zoom = {
       zoom.cancleMatch()
       return false
     })
-    $('#azf-submit').on('click', function() {
-      zoom.getAccessToken()
-      // return false
+    $('#startZoom').on('click', function() {
+      zoom.startZoom()
     })
     zoom.renderLangs()
     zoom.changeLang()
     // zoom.match()
   },
+  removeDialog: function() {
+    $('#zoom-form').remove()
+    $('div.container-fluid').removeAttr('style')
+    zoom.zoomflag = false
+  },
   changeLang: function() {
+    zoom.lang = $('#azflang').val()
+    localStorage.setItem('zoomLang', zoom.lang)
     $('#azflang').on('change', function(){
       zoom.lang = $(this).val()
       localStorage.setItem('zoomLang', zoom.lang)
@@ -261,6 +218,48 @@ var zoom = {
       zoom.langs = res
       localStorage.setItem('zoomLangs', JSON.stringify(res))
     })
+  },
+  startZoom: function() {
+    $('#startZoom').attr('disabled', true).text('Waiting...')
+    var res = null
+    var xhr = new XMLHttpRequest()
+    xhr.onreadystatechange = function(e) {
+      if ((xhr.readyState !== 3) && (xhr.readyState !== 4))
+        return false
+      if (xhr.response)
+        res = JSON.parse(xhr.response)
+      if ((xhr.readyState === 4) && (xhr.status === 200)) {
+        zoom.lunchMeeting(res)
+      }
+
+      if ((xhr.status === 1010) && (xhr.readyState === 3)) {
+        zoom.getAccessToken(res.errorMessage.url)
+        zoom.waiting()
+        delete xhr
+      }
+    }
+    xhr.open('POST', zoom.urls_startzoom, true)
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
+    xhr.send(zoom.xhrData({lang: localStorage.getItem('zoomLang')}))
+  },
+  lunchMeeting: function(config) {
+    zoom.appendIframe()
+    var src = zoom.urls_meetinghtml + zoom.serialize(config)
+    $(document).find('#zoom-iframe').attr('src', src)
+    zoom.changeGamePanelStyle()
+    zoom.removeDialog()
+    $('#'+zoom.game).click()
+  },
+  waiting: function() {
+    var wint = window.setInterval(function() {
+      $.ajax({
+        url: zoom.urls_checkwaiting,
+        success: function(res) {
+          window.clearInterval(wint)
+          zoom.startZoom()
+        }
+      })
+    }, zoom.matchFrequency)
   },
   match: function() {
     zoom.matchClearInterval = window.setInterval(function() {
@@ -290,12 +289,11 @@ var zoom = {
       if (now == 0)
         $('#azf-countdown').remove()
     }
-  },
-  removeDialog: function() {
-    $('#zoom-form').remove()
-    $('div.container-fluid').removeAttr('style')
-    zoom.zoomflag = false
   }
 }
 
-zoom.start()
+
+
+$(document).ready(function() {
+  zoom.start()
+})

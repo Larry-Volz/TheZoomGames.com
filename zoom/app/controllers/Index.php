@@ -7,13 +7,9 @@ class Index extends BaseController
 {
     public function index()
     {
-        dump(self::class.'index()');
         // get user info and register session id
         // return redirect('/index.html');
-        // header('Location: /index.html');
-        // exit;
-        // dump(\app\services\Meeting::queryMeeting());
-        dump(\app\services\Meeting::createMeetings());
+        exit(header('Location: /index.html'));
     }
 
     public function queryLangs() {
@@ -25,6 +21,16 @@ class Index extends BaseController
         return json($foo->getUser());
     }
 
+    public function startZoom() {
+        return json(\app\services\Meeting::startZoom());
+    }
+
+    public function checkWaiting() {
+        return json(\app\services\Meeting::startZoom());
+    }
+
+
+
     public function setName() {
         $foo = new \app\services\User();
         return json($foo->setName());
@@ -33,6 +39,11 @@ class Index extends BaseController
     public function joinMeeting() {
         $meeting = new \app\services\Meeting();
         return json($meeting->joinMeeting());
+    }
+
+    public function inviteMeeting() {
+        $meeting = new \app\services\Meeting();
+        return json($meeting->inviteMeeting());
     }
 
     public function requestToken() {

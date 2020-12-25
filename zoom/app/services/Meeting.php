@@ -4,7 +4,7 @@ namespace app\services;
 use app\models\Config;
 use app\models\Meeting as MeetingModel;
 use app\models\User as UserModel;
-use \Uncgits\ZoomApi\Clients\Meetings;
+use \Uncgits\ZoomApi\Clients\Meetings as MeetingClient;
 
 class Meeting
 {
@@ -17,13 +17,13 @@ class Meeting
         if (self::$savedMeeting)
             return self::$savedMeeting;
         $foo = MeetingModel::getMeeting();
-        if (!$foo['meeting_id'])
+        if (empty($foo['meeting_id']))
             return self::$savedMeeting;
-        $zoom = Zoom::api(Meetings::class);
+        $zoom = Zoom::api(MeetingClient::class);
         $foo = $zoom->getMeeting($foo['meeting_id']);
         if (!Zoom::status($foo))
             return self::$savedMeeting;
-        self::$savedMeeting = $foo->content();
+        self::$savedMeeting = (array)$foo->content();
         return self::$savedMeeting;
     }
 
@@ -35,7 +35,7 @@ class Meeting
         $user = User::user();
         if (!$user)
             return [];
-        $zoom = Zoom::api(Meetings::class);
+        $zoom = Zoom::api(MeetingClient::class);
         $res = $zoom->listMeetings($user->id);
         if (!Zoom::status($res))
             return [];
@@ -43,10 +43,12 @@ class Meeting
         if (!$res)
             return $res;
         $res = current($res);
-        return $zoom->getMeeting($res->id)->content();
+        $res = $zoom->getMeeting($res->id)->content();
+        MeetingModel::saveMeeting($res);
+        return (array)$res;
     }
 
-    private static function configMeeting(): array
+    private static function createMeetingConfig(): array
     {
         $user = User::user();
         if (!User::user())
@@ -73,32 +75,62 @@ class Meeting
             return false;
         if (!User::user())
             return false;
-        $zoom = Zoom::api(Meetings::class);
-        $zoom->setParameters(self::configMeeting());
+        $zoom = Zoom::api(MeetingClient::class);
+        $zoom->setParameters(self::createMeetingConfig());
         $request = $zoom->createMeeting(User::user()->id);
         if (!Zoom::status($request))
             return false;
-        return MeetingModel::saveMeeting($request->content());
+        MeetingModel::saveMeeting($request->content());
+        return (array)$request->content();
     }
 
-    public static function joinMeeting()
+
+
+    // get functional meeting.
+    private static function getMeeting()
     {
-        if (Validation::validate([
-            'meetingNumber' => ['require', 'integer'],
-            'role' => ['require', ['in', [0, 1]]]
-        ])) {
-            $arr['apiKey'] = Config::config('ZOOM_API_KEY');
-            $arr['signature'] = Foo::generateSignature(
-                $arr['apiKey'],
-                Config::config('ZOOM_API_SECRET'),
-                $_POST['meetingNumber'],
-                $_POST['role']
-            );
-            Foo::json($arr);
-        } else {
-            $this->fail('from data validation fail!');
-        }
+        if ($meeting = self::queryMeeting())
+            return $meeting;
+        if ($meeting = self::createMeetings())
+            return $meeting;
+        return [];
     }
+
+    private static function startMeetingConfig(): array
+    {
+        $meeting = self::getMeeting();
+        $user = User::user();
+        if (!User::user())
+            return [];
+        $config['meetingId'] = $meeting['id'];
+        $config['password'] = $meeting['password'];
+        $config['name'] = User::user()->first_name;
+        $config['apikey'] = Config::config('ZOOM_API_KEY');
+        $config['role'] = 1;
+        if (0)
+            $config['role'] = 0;
+        $config['lang'] = $_POST['lang'];
+        $config['china'] = 0;
+        // if ($config['lang'] === 'zh-cn')
+        //     $config['china'] = 1;
+        $config['signature'] = Foo::generateSignature(
+            $config['apikey'],
+            Config::config('ZOOM_API_SECRET'),
+            $config['meetingId'],
+            $config['role']
+        );
+        return $config;
+    }
+
+    public static function startZoom()
+    {
+        return self::startMeetingConfig();
+    }
+
+    // public static function checkWaiting()
+    // {
+
+    // }
 
     public static function foo()
     {

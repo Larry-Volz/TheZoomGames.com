@@ -12,6 +12,7 @@ use \Uncgits\ZoomApi\ZoomApiResult;
 class Zoom extends ZoomApiConfig
 {
     private static $apis = null;
+    private static $zoomapiresult = null;
 
     public function __construct()
     {
@@ -30,7 +31,7 @@ class Zoom extends ZoomApiConfig
         // more likely, you'll write your own method here that calls either $this->refreshToken() or $this->setJwt() depending on whether you determine you need a new token. that logic is up to you!
     }
 
-    static public function api($client=Meetings::class): UncgitsZoomApi
+    public static function api($client=Meetings::class): UncgitsZoomApi
     {
         if (!empty(self::$apis[$client]))
             return self::$apis[$client];
@@ -42,14 +43,15 @@ class Zoom extends ZoomApiConfig
         return self::$apis[$client];
     }
 
-    static public function status(ZoomApiResult $class): bool
+    public static function status(ZoomApiResult $class): bool
     {
         if ($class === null)
             return false;
+        self::$zoomapiresult = $class;
         return ($class->status() === 'success');
     }
 
-    static public function langs()
+    public static function langs()
     {
         $dao = new Config;
         if ($langs = $dao->config('ZOOM_LANGS'))
@@ -59,5 +61,22 @@ class Zoom extends ZoomApiConfig
         $dao->type = 1;
         $dao->config('ZOOM_LANGS', json_encode($lang));
         return $lang;
+    }
+
+    private static function untitled()
+    {
+        $pattern = '/get|__|set|parseCalls/';
+        $obj = self::$zoomapiresult;
+        dump(get_class_methods(ZoomApiResult::class));
+        foreach (get_class_methods(ZoomApiResult::class) as $method)
+            if (!preg_match($pattern, $method))
+                dump("$method : ", $obj->$method());
+    }
+
+    public function __destruct()
+    {
+        $obj = self::$zoomapiresult;
+        if ($obj->lastReason() === 'Unauthorized')
+            OAuth::requestToken();
     }
 }

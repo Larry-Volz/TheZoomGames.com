@@ -27,10 +27,6 @@
         "bacart/guzzle-client": "^0.1.20",
         "topthink/think-view": "^1.0"
     },
-    "require-dev": {
-        "symfony/var-dumper": "^4.2",
-        "topthink/think-trace":"^1.0"
-    },
     "autoload": {
         "psr-4": {
             "app\\": "app"

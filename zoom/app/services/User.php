@@ -38,7 +38,7 @@ class User
             return self::$zoomUser;
         $zoom = Zoom::api(Users::class);
         $zoom = $zoom->listUsers();
-        if ($zoom->status() !== 'success')
+        if (!Zoom::status($zoom))
             return false;
         self::$zoomUser = current($zoom->content());
         return self::$zoomUser;
