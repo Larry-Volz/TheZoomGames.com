@@ -11,32 +11,25 @@ ZoomMtg.setZoomJSLib('https://dmogdx0jrul3u.cloudfront.net/1.8.3/lib', '/av')
 
 ZoomMtg.preLoadWasm()
 ZoomMtg.prepareJssdk()
+console.log(parseQuery())
 joinMeeting(parseQuery())
 function joinMeeting(data)
 {
+  data.error = function(res) {
+    console.clear()
+    // console.log(res)
+    removeDivPhone()
+  }
+  data.success = function(res) {
+    console.clear()
+    // console.log(res)
+    removeDivPhone()
+  }
   ZoomMtg.init({
     leaveUrl: './thanks.html',
     isSupportAV: true,
     success: function() {
-      ZoomMtg.join({
-        apiKey: data.apikey,
-        china: data.china,
-        lang: data.lang,
-        meetingNumber: data.meetingId,
-        passWord: data.password,
-        signature: data.signature,
-        userName: data.name,
-        error: function(res) {
-          console.clear()
-          // console.log(res)
-          removeDivPhone()
-        },
-        success: function(res) {
-          console.clear()
-          // console.log(res)
-          removeDivPhone()
-        }
-      })
+      ZoomMtg.join(data)
     }
   })
 }

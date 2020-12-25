@@ -102,10 +102,10 @@ class Meeting
         $user = User::user();
         if (!User::user())
             return [];
-        $config['meetingId'] = $meeting['id'];
+        $config['meetingNumber'] = $meeting['id'];
         $config['password'] = $meeting['password'];
-        $config['name'] = User::user()->first_name;
-        $config['apikey'] = Config::config('ZOOM_API_KEY');
+        $config['userName'] = User::user()->first_name;
+        $config['apiKey'] = Config::config('ZOOM_API_KEY');
         $config['role'] = 1;
         if (0)
             $config['role'] = 0;
@@ -114,9 +114,9 @@ class Meeting
         // if ($config['lang'] === 'zh-cn')
         //     $config['china'] = 1;
         $config['signature'] = Foo::generateSignature(
-            $config['apikey'],
+            $config['apiKey'],
             Config::config('ZOOM_API_SECRET'),
-            $config['meetingId'],
+            $config['meetingNumber'],
             $config['role']
         );
         return $config;
