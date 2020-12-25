@@ -2,7 +2,7 @@
 namespace app\services;
 
 use app\models\Config;
-use app\models\Token;
+use app\models\OauthToken;
 use Uncgits\ZoomApi\ZoomApiConfig;
 use \Uncgits\ZoomApi\Clients\Meetings;
 use \Uncgits\ZoomApi\Adapters\Guzzle;

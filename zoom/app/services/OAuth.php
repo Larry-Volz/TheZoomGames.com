@@ -2,7 +2,7 @@
 namespace app\services;
 
 use app\models\User as UserModel;
-use app\models\Token;
+use app\models\OauthToken;
 use app\models\Config;
 use app\services\User;
 use app\services\Validation;
