@@ -44,7 +44,7 @@ class Meeting
             return $res;
         $res = current($res);
         $res = $zoom->getMeeting($res->id)->content();
-        MeetingModel::saveMeeting($res);
+        MeetingModel::saveMeeting((array)$res);
         return (array)$res;
     }
 
@@ -62,7 +62,7 @@ class Meeting
                 'host_video' => true,
                 'participant_video' => true,
                 'join_before_host' => true,
-                'use_pmi' => true
+                // 'use_pmi' => true
             ]
         ];
     }
@@ -80,7 +80,7 @@ class Meeting
         $request = $zoom->createMeeting(User::user()->id);
         if (!Zoom::status($request))
             return false;
-        MeetingModel::saveMeeting($request->content());
+        MeetingModel::saveMeeting((array)$request->content());
         return (array)$request->content();
     }
 
