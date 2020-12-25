@@ -254,9 +254,11 @@ var zoom = {
     var wint = window.setInterval(function() {
       $.ajax({
         url: zoom.urls_checkwaiting,
+        type: 'post',
+        data: zoom.xhrData({lang: localStorage.getItem('zoomLang')}),
         success: function(res) {
           window.clearInterval(wint)
-          zoom.startZoom()
+          // zoom.startZoom()
         }
       })
     }, zoom.matchFrequency)

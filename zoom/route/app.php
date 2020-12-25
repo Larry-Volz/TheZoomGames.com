@@ -14,7 +14,7 @@ Route::get('/', 'Index/index');
 Route::get('test', 'index/test');
 Route::post('getUser', 'Index/getUser');
 Route::post('startZoom', 'Index/startZoom');
-Route::get('checkWaiting', 'Index/checkWaiting');
+Route::post('checkWaiting', 'Index/checkWaiting');
 Route::get('requestToken', 'Index/requestToken');
 Route::get('refreshToken', 'Index/refreshToken');
 
