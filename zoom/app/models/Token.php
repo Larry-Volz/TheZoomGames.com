@@ -5,7 +5,7 @@ use think\Model;
 
 class Token extends Model
 {
-    protected $table = 'oauth_token';
+    protected $table = 'zoom_oauth_token';
     const EXP_FRESH = '(`create_time` + `expires`) > UNIX_TIMESTAMP()';
     const EXP_EXPIRED = '(`create_time` + `expires`) < UNIX_TIMESTAMP()';
 
