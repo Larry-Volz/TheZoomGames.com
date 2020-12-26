@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin</title>
+</head>
+<body>
+  <style type="text/css">
+    table,tr,textarea{width:100%;}
+    td{width:auto;}
+  </style>
+  <h1>Admin</h1>
+  <form action="./save" method="post">
+    <table>
+      <thead>
+        <th>key</th>
+        <th>value</th>
+      </thead>
+    </table>
+    <input type="submit" name="">
+  </form>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script type="text/javascript">
+    $.ajax({
+      url: './list',
+      success: function(res)
+      {
+        $(res).each(function(k,v) {
+          var tr = document.createElement('tr')
+          var td = '<td>'+v['key']+'</td><td class="value">'
+          td += '<textarea name="'+v['key']+'">'+v['value']+'</textarea></td>'
+          $(tr).html(td)
+          $('table').append(tr)
+        })
+      }
+    })
+  </script>
+</body>
+</html>
