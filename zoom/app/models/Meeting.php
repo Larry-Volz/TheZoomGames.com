@@ -12,7 +12,7 @@ class Meeting extends Model
         if (empty($arr))
             return false;
         $rule['uuid'] = ['require'];
-        $rule['meeting_id'] = ['require', 'integer'];
+        $rule['id'] = ['require', 'integer'];
         $rule['password'] = ['require'];
         if (!\app\services\Validation::validate($rule, $arr))
             return false;

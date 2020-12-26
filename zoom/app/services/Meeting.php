@@ -101,7 +101,7 @@ class Meeting
         $config['role'] = 1;
         $config['apiKey'] = Config::config('ZOOM_API_KEY');
 
-        if (!$_POST['name'])
+        if (empty($_POST['name']))
         {
             $meeting = self::getMeeting();
             if (!$user = User::user())
