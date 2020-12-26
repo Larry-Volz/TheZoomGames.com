@@ -26,9 +26,9 @@ class Admin
         foreach ($_POST as $key => $value)
             $data[] = ['key' => $key, 'value' => $value];
         if ($dao->replace()->saveAll($data))
-            return 'success';
+            return 'success<script>setTimeout(function(){location.href="index"},3000)</script>';
         else
-            return 'fail';
+            return 'fail<script>setTimeout(function(){location.href="index"},3000)</script>';
     }
 
     public function database()
