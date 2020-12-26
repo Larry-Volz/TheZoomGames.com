@@ -58,9 +58,11 @@ var zoom = {
   runOnce: function() {
     zoom.queryLangs()
     $(document).on('mousedown', zoom.selectors(), function(e) {
-      console.log('mousedown here')
+      // console.log('mousedown here')
       if (zoom.zoomdoublegetuserflag === true)
         return true
+      zoom.zoomdoublegetuserflag = true
+
       zoom.assignment($(this).attr('id'))
       console.clear()
       zoom.getUser()
@@ -186,7 +188,7 @@ var zoom = {
         if (zoom.zoomflag)
           return false
         zoom.zoomflag = true
-        console.log('here')
+
         zoom.startZoom()
         return false
       })
@@ -197,7 +199,7 @@ var zoom = {
         if (zoom.zoomflag)
           return false
         zoom.zoomflag = true
-        console.log('here')
+
         zoom.startZoom(true)
         return false
       })
