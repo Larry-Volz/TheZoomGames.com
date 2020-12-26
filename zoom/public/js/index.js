@@ -169,7 +169,6 @@ var zoom = {
       $('div.container-fluid').append(hl).css({position:'relative'})
     $('#azf-cancle').on('click', function() {
       zoom.removeDialog()
-      zoom.cancleMatch()
       return false
     })
     $('#startZoom').on('click', function() {
@@ -177,7 +176,6 @@ var zoom = {
     })
     zoom.renderLangs()
     zoom.changeLang()
-    // zoom.match()
   },
   removeDialog: function() {
     $('#zoom-form').remove()
@@ -244,35 +242,6 @@ var zoom = {
     zoom.changeGamePanelStyle()
     zoom.removeDialog()
     $('#'+zoom.game).click()
-  },
-  match: function() {
-    zoom.matchClearInterval = window.setInterval(function() {
-      zoom.matchCountDown()
-      $.post(zoom.urls_match, {game: zoom.game}, function(res) {
-        console.log(res)
-        zoom.queryLangs()
-        window.clearInterval(zoom.matchClearInterval)
-      })
-    }, zoom.matchFrequency)
-
-    zoom.matchClearTimeout = window.setTimeout(function() {
-      zoom.cancleMatch()
-    }, zoom.matchFrequency * zoom.matchTimeout)
-  },
-  cancleMatch: function() {
-    $('#azf-countdown').remove()
-    window.clearInterval(zoom.matchClearInterval)
-    window.clearTimeout(zoom.matchClearTimeout)
-  },
-  matchCountDown: function() {
-    if ($('.azf-input').has('#azf-countdown').length === 0)
-      $('.azf-input').append('<h1 id="azf-countdown">'+zoom.matchTimeout+'</h1>')
-    else {
-      var now = $('#azf-countdown').text() - 1
-      $('#azf-countdown').text(now)
-      if (now == 0)
-        $('#azf-countdown').remove()
-    }
   }
 }
 
