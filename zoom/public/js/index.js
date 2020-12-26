@@ -237,6 +237,7 @@ var zoom = {
   },
   lunchMeeting: function(config) {
     zoom.appendIframe()
+    config.lang = localStorage.getItem('zoomLang')
     var src = zoom.urls_meetinghtml + zoom.serialize(config)
     $(document).find('#zoom-iframe').attr('src', src)
     zoom.changeGamePanelStyle()
