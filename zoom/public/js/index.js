@@ -162,6 +162,7 @@ var zoom = {
     // hl += '    </div>'
     hl += '    <div class="azf-button card-body">'
     hl += '      <button id="startZoom">Start Zoom</button>'
+    hl += '      <button id="azf-cancle">Cancle</button>'
     hl += '    </div>'
     hl += '  </div>'
     hl += '</div>'
