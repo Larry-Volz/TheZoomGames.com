@@ -17,19 +17,38 @@ function joinMeeting(data)
 {
   data.error = function(res) {
     console.clear()
-    // console.log(res)
+    console.log(res)
     removeDivPhone()
   }
   data.success = function(res) {
     console.clear()
-    // console.log(res)
+    console.log(res)
     removeDivPhone()
   }
+  console.log(data)
   ZoomMtg.init({
     leaveUrl: './thanks.html',
     isSupportAV: true,
     success: function() {
-      ZoomMtg.join(data)
+      // ZoomMtg.join(data)
+      $.i18n.reload(data.lang)
+      ZoomMtg.join({
+        signature: data.signature,
+        apiKey: data.apiKey,
+        meetingNumber: data.meetingNumber,
+        userName: data.userName,
+        passWord: data.password,
+        error: function(res) {
+          console.clear()
+          console.log(res)
+          removeDivPhone()
+        },
+        success: function(res) {
+          console.clear()
+          console.log(res)
+          removeDivPhone()
+        }
+      })
     }
   })
 }
@@ -48,17 +67,17 @@ function removeDivPhone()
 
 function parseQuery () {
   return (function () {
-    var href = window.location.href;
-    var queryString = href.substr(href.indexOf("?"));
-    var query = {};
+    var href = window.location.href
+    var queryString = href.substr(href.indexOf("?"))
+    var query = {}
     var pairs = (queryString[0] === "?"
       ? queryString.substr(1)
       : queryString
-    ).split("&");
+    ).split("&")
     for (var i = 0; i < pairs.length; i += 1) {
-      var pair = pairs[i].split("=");
-      query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || "");
+      var pair = pairs[i].split("=")
+      query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || "")
     }
-    return query;
-  })();
+    return query
+  })()
 }

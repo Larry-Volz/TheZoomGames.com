@@ -17,6 +17,10 @@
         window.close()
       $('#countdown').text($('#countdown').text()-1)
     }, 1000)
+    window.onbeforeunload = function() {
+      // window.opener.zoom.finished('token')
+      window.opener.zoom.startZoom()
+    }
   </script>
 </body>
 </html>

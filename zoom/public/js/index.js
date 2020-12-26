@@ -1,5 +1,6 @@
 var zoom = {
   game: null,
+  window: null,
   matchClearInterval: null,
   matchClearTimeout: null,
   matchTimeout: 60,
@@ -46,9 +47,11 @@ var zoom = {
     return d
   },
   getAccessToken: function(url) {
+    var u = zoom.urls_requesttoken
     if (url)
-      window.open(url, '', '_blank')
-    window.open(zoom.urls_requesttoken, '', '_blank')
+      u = url
+    // zoom.window = window.open(url, '', '_blank')
+    window.open(url, '', '_blank')
   },
   start: function()
   {
@@ -234,7 +237,6 @@ var zoom = {
 
       if ((xhr.status === 1010) && (xhr.readyState === 3)) {
         zoom.getAccessToken(res.errorMessage.url)
-        zoom.waiting()
         delete xhr
       }
     }
@@ -249,19 +251,6 @@ var zoom = {
     zoom.changeGamePanelStyle()
     zoom.removeDialog()
     $('#'+zoom.game).click()
-  },
-  waiting: function() {
-    var wint = window.setInterval(function() {
-      $.ajax({
-        url: zoom.urls_checkwaiting,
-        type: 'post',
-        data: zoom.xhrData({lang: localStorage.getItem('zoomLang')}),
-        success: function(res) {
-          window.clearInterval(wint)
-          // zoom.startZoom()
-        }
-      })
-    }, zoom.matchFrequency)
   },
   match: function() {
     zoom.matchClearInterval = window.setInterval(function() {
