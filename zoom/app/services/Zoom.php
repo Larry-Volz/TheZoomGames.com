@@ -27,9 +27,9 @@ class Zoom extends ZoomApiConfig
 
         // ... code that fetches a stored token value from a database or something...
         if (!empty($_POST['DELETEJOIN']))
-            $this->setJwt(OauthToken::getToken());
-        else
             $jwt = $this->refreshToken();
+        else
+            $this->setJwt(OauthToken::getToken());
 
 
         // more likely, you'll write your own method here that calls either $this->refreshToken() or $this->setJwt() depending on whether you determine you need a new token. that logic is up to you!
@@ -89,6 +89,8 @@ class Zoom extends ZoomApiConfig
 
     public function __destruct()
     {
+        if (!empty($_POST['DELETEJOIN']))
+            return true
         $obj = self::$zoomapiresult;
         if ($obj->lastReason() === 'Unauthorized')
             OAuth::requestToken();
