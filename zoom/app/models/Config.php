@@ -17,7 +17,7 @@ class Config extends Model
         $foo = new self;
         if ($value !== null) {
             $val['value'] = $value;
-            return $foo->save(array_merge($map, $val));
+            return $foo->replace()->save(array_merge($map, $val));
         } else {
             $res = $foo->where($map)->find();
             if ($res)
