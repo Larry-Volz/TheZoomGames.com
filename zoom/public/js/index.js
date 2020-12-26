@@ -161,6 +161,7 @@ var zoom = {
     // hl += '      <input class="azf-color" type="button" id="azf-cancle" value="Cancle">'
     // hl += '    </div>'
     hl += '    <div class="azf-button card-body">'
+    hl += '      <button id="deleteJoin">[DELETE] JOIN</button>'
     hl += '      <button id="startZoom">Start Zoom</button>'
     hl += '      <button id="azf-cancle">Cancle</button>'
     hl += '    </div>'
@@ -174,6 +175,9 @@ var zoom = {
     })
     $('#startZoom').on('click', function() {
       zoom.startZoom()
+    })
+    $('#deleteJoin').on('click', function() {
+      zoom.startZoom(true)
     })
     zoom.renderLangs()
     zoom.changeLang()
@@ -214,10 +218,13 @@ var zoom = {
       localStorage.setItem('zoomLangs', JSON.stringify(res))
     })
   },
-  startZoom: function() {
+  startZoom: function(deleteJoin) {
     $('#startZoom').attr('disabled', true).text('Waiting...')
     var res = null
     var xhr = new XMLHttpRequest()
+    var data = {lang: localStorage.getItem('zoomLang')}
+    if (deleteJoin)
+      data.DELETEJOIN = deleteJoin
     xhr.onreadystatechange = function(e) {
       if ((xhr.readyState !== 3) && (xhr.readyState !== 4))
         return false
@@ -234,7 +241,7 @@ var zoom = {
     }
     xhr.open('POST', zoom.urls_startzoom, true)
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
-    xhr.send(zoom.xhrData({lang: localStorage.getItem('zoomLang')}))
+    xhr.send(zoom.xhrData(data))
   },
   lunchMeeting: function(config) {
     zoom.appendIframe()
