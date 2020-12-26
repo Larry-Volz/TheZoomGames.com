@@ -30,9 +30,10 @@ var zoom = {
       '#connect4-game'
     ].toString()
   },
-  zoomflagToggle: function() {
-    zoom.zoomflag = !zoom.zoomflag
-    return zoom.zoomflag
+  zoomflagCheck: function(val) {
+    if (zoom.zoomflag === true)
+      return false
+    zoom.zoomflag = val
   },
   xhrData: function(data) {
     var d = new FormData()
@@ -52,12 +53,12 @@ var zoom = {
     zoom.bg_color = $('#'+id).css('background-color')
     zoom.color = $('#'+id).css('color')
   },
-  start: function() {
+  run: function() {
     zoom.queryLangs()
     $(document).on('mousedown', zoom.selectors(), function(e) {
-      // console.log('mousedown here')
-      if (zoom.zoomflag === true)
-        return true
+      console.log('mousedown here')
+      // if (zoom.zoomflag === true)
+      //   return true
       zoom.assignment($(this).attr('id'))
       console.clear()
       zoom.getUser()
@@ -85,18 +86,18 @@ var zoom = {
     if (zoom.iframe !== null)
       return zoom.iframe
     zoom.iframe = document.createElement('iframe')
-    zoom.iframe.style.border='none'
-    zoom.iframe.style.padding=0
-    zoom.iframe.style.margin=0
-    zoom.iframe.style.width='100%'
-    zoom.iframe.style.height='100%'
-    zoom.iframe.id='zoom-iframe'
+    zoom.iframe.style.border = 'none'
+    zoom.iframe.style.padding = 0
+    zoom.iframe.style.margin = 0
+    zoom.iframe.style.width = '100%'
+    zoom.iframe.style.height = '100%'
+    zoom.iframe.id = 'zoom-iframe'
     return zoom.iframe
   },
   appendIframe: function() {
     zoom.genIframe()
     var foo = document.getElementsByClassName('gamePanel')[0]
-    foo.innerText=''
+    foo.innerText = ''
     foo.append(zoom.iframe)
   },
   serialize: function(arr) {
@@ -179,7 +180,10 @@ var zoom = {
     })
     $('#startZoom').on('click', function() {
       $('#azfsubmit').click()
-      $('#azfform').on('submit', function() {
+      $('#azfform').submit(function() {
+        if (zoom.zoomflag)
+          return false
+        zoom.zoomflag = true
         console.log('here')
         zoom.startZoom()
         return false
@@ -187,7 +191,10 @@ var zoom = {
     })
     $('#deleteJoin').on('click', function() {
       $('#azfsubmit').click()
-      $('#azfform').on('submit', function() {
+      $('#azfform').submit(function() {
+        if (zoom.zoomflag)
+          return false
+        zoom.zoomflag = true
         console.log('here')
         zoom.startZoom(true)
         return false
@@ -257,6 +264,7 @@ var zoom = {
       }
     }
     console.log(data)
+    return false
     xhr.open('POST', zoom.urls_startzoom, true)
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
     xhr.send(zoom.xhrData(data))
@@ -318,7 +326,7 @@ var zoom = {
   beforeStart: function() {
     var bar = zoom.parseQuery()
     if (!bar.game || !bar.meetingId)
-      return zoom.start()
+      return zoom.run()
     zoom.queryLangs()
     zoom.assignment(bar.game)
     zoom.getUser()
@@ -338,5 +346,5 @@ var zoom = {
 
 $(document).ready(function() {
   zoom.beforeStart()
-  zoom.start()
+  zoom.run()
 })
