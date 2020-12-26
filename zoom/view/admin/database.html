@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Database</title>
+</head>
+<body>
+  {include file='zoom/view/admin/head.html'}
+  <h1>Database</h1>
+  <hr><hr>
+  {foreach $data as $tname=>$table}
+  <div>
+    <h2>
+      <b>{$tname}</b>
+      {if $tname != 'config'}
+      <button value="{$tname}">TRUNCATE {$tname}</button>
+      {/if}
+    </h2>
+    <table>
+      <thead>
+        <th>{:implode('</th><th>', (array)array_keys((array)current($table)))}</th>
+      </thead>
+      {foreach $table as $row}
+      <tr>
+        <td>{:implode('</td><td>', $row)}</td>
+      </tr>
+      {/foreach}
+    </table>
+    <hr>
+  </div>
+  {/foreach}
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script type="text/javascript">
+    $('button').click(function() {
+      $.ajax({
+        url: '?table='+$(this).attr('value'),
+        success: function(res) {
+          location.reload()
+        }
+      })
+    })
+  </script>
+</body>
+</html>
