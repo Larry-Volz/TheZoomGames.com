@@ -17,16 +17,9 @@ var zoom = {
   /* apis */
   urls_querylangs: './queryLangs',
   urls_getuser: './getUser',
-  urls_signature: './joinMeeting',
   urls_startzoom: './startZoom',
-  urls_checkwaiting: './checkWaiting',
 
-  urls_match: './match',
   urls_setname: './setName',
-  urls_requesttoken: './requestToken',
-  urls_refreshtoken: './refreshToken',
-  urls_createmeeting: './createMeeting',
-  urls_joinmeeting: './joinMeeting',
   /* apis */
   selectors: function() {
     return [

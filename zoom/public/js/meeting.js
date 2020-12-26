@@ -17,16 +17,6 @@ function joinMeeting(data)
 {
   if (data.china)
     ZoomMtg.setZoomJSLib("https://jssdk.zoomus.cn/1.8.3/lib", "/av")
-  data.error = function(res) {
-    console.clear()
-    console.log(res)
-    removeDivPhone()
-  }
-  data.success = function(res) {
-    console.clear()
-    console.log(res)
-    removeDivPhone()
-  }
   console.log(data)
   ZoomMtg.init({
     leaveUrl: './thanks.html',
