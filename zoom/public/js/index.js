@@ -1,6 +1,7 @@
 var zoom = {
   game: null,
   window: null,
+  meetingId: null,
   matchClearInterval: null,
   matchClearTimeout: null,
   matchTimeout: 60,
@@ -46,17 +47,19 @@ var zoom = {
     // zoom.window = window.open(url, '', '_blank')
     window.open(url, '', '_blank')
   },
-  start: function()
-  {
+  assignment: function(id) {
+    zoom.game = $('#'+id).attr('id')
+    zoom.bg_color = $('#'+id).css('background-color')
+    zoom.color = $('#'+id).css('color')
+  },
+  start: function() {
     zoom.queryLangs()
     $(document).on('mousedown', zoom.selectors(), function(e) {
+      // console.log('mousedown here')
       if (zoom.zoomflag === true)
         return true
-      // console.log('mousedown here')
+      zoom.assignment($(this).attr('id'))
       console.clear()
-      zoom.game = $(this).attr('id')
-      zoom.bg_color = $(this).css('background-color')
-      zoom.color = $(this).css('color')
       zoom.getUser()
       zoom.createDialog()
     })
@@ -115,23 +118,7 @@ var zoom = {
       $(document).find('head').append(style)
     })
   },
-  loadingDialog:function() {
-    if (!zoom.userInfo.name)
-      return false
-    $('.azf-input,.azf-button').remove()
-    $('.azf-box h1').text('loading...').css({
-      height: '100%',
-      'line-height': $('.azf-box form').css('height')
-    })
-    return false
-    $.ajax({
-      url: '/find match',
-      success: function(res) {
-        zoom.callZoom()
-      }
-    })
-  },
-  createDialog: function() {
+  createDialog: function(askName=false) {
     var bg_color = zoom.bg_color
     var color = zoom.color
     var hl = '<div style="left:0;top:0;height:100%;width:100%;position:absolute;" class="azf" id="zoom-form">'
@@ -142,29 +129,46 @@ var zoom = {
     hl += '    div.azf-box{left:20%;top:25%;width:60%;height:60%;}'
     hl += '    div.azf-box{border-radius:1rem!important;}'
     hl += '    div.azf-input label[for="azflang"]{padding-right:10px;}'
-    // hl += '    .azf-button button{margin-left:10px;}'
-    hl += '    #azf-cancle{margin-left:10px;}'
+    hl += '    div.azf-input label[for="azfname"]{padding-right:10px;}'
+    hl += '    .azf-button button{margin-left:10px;}'
+    hl += '    #azfsubmit{display:none;}'
     hl += '    #azflang option{text-align:justify;text-justify: inter-word;}'
-    // hl += '    #azflang option::after{width:100%;content:"";display:inline-block;}'
-    // hl += '    #azflang,label[for="azflang"],#azf-submit{display:none;}'
     hl += '  </style>'
     hl += '  <div class="azf-box shadow rounded">'
     hl += '    <h5 class="azf-color card-body">Some step...</h5>'
-    hl += '    <div class="azf-input card-body">'
-    hl += '      <label for="azflang" class="azf-color">'
-    hl += '        <h3><b style="color:red;">*</b> <b>Set Zoom Language</b></h3>'
-    hl += '      </label>'
-    hl += '      <select id="azflang" name="azflang" required></select>'
-    hl += '    </div>'
-    // hl += '    <div class="azf-button card-body">'
-    // hl += '      <input class="azf-color" type="submit" id="azf-submit">'
-    // hl += '      <input class="azf-color" type="button" id="azf-cancle" value="Cancle">'
-    // hl += '    </div>'
-    hl += '    <div class="azf-button card-body">'
-    hl += '      <button id="deleteJoin">[DELETE] JOIN</button>'
-    hl += '      <button id="startZoom">Start Zoom</button>'
-    hl += '      <button id="azf-cancle">Cancle</button>'
-    hl += '    </div>'
+    hl += '    <form id="azfform" onsubmit="javascript:return false">'
+
+    if (askName) {
+      hl += '      <style>div.azf-box{height:80%;top:10%;}</style>'
+      hl += '      <div class="azf-input card-body">'
+      hl += '        <div>'
+      hl += '          <label for="azfname" class="azf-color">'
+      hl += '            <h3><b style="color:red;">*</b> <b>Set Your Name</b></h3>'
+      hl += '          </label>'
+      hl += '        </div>'
+      hl += '        <div>'
+      hl += '          <input id="azfname" required type="text" placeholder="what\'s your name" />'
+      hl += '        <div>'
+      hl += '      </div>'
+    }
+
+    hl += '      <div class="azf-input card-body">'
+    hl += '        <div>'
+    hl += '          <label for="azflang" class="azf-color">'
+    hl += '            <h3><b style="color:red;">*</b> <b>Set Zoom Language</b></h3>'
+    hl += '          </label>'
+    hl += '        </div>'
+    hl += '        <div>'
+    hl += '          <select id="azflang" name="azflang" required></select>'
+    hl += '        </div>'
+    hl += '      </div>'
+    hl += '      <div class="azf-button card-body">'
+    hl += '        <input type="submit" id="azfsubmit">'
+    hl += '        <button id="deleteJoin">[DELETE] JOIN</button>'
+    hl += '        <button id="startZoom">Start Zoom</button>'
+    hl += '        <button id="azf-cancle">Cancle</button>'
+    hl += '      </div>'
+    hl += '    </form>'
     hl += '  </div>'
     hl += '</div>'
     if (!$('#zoom-form').length)
@@ -174,10 +178,20 @@ var zoom = {
       return false
     })
     $('#startZoom').on('click', function() {
-      zoom.startZoom()
+      $('#azfsubmit').click()
+      $('#azfform').on('submit', function() {
+        console.log('here')
+        zoom.startZoom()
+        return false
+      })
     })
     $('#deleteJoin').on('click', function() {
-      zoom.startZoom(true)
+      $('#azfsubmit').click()
+      $('#azfform').on('submit', function() {
+        console.log('here')
+        zoom.startZoom(true)
+        return false
+      })
     })
     zoom.renderLangs()
     zoom.changeLang()
@@ -213,6 +227,7 @@ var zoom = {
           else
             html += '<option value="'+k+'">'+res[k]+'</option>'
         localStorage.setItem('zoomLangsHtml', html)
+        zoom.renderLangs()
       }
       zoom.langs = res
       localStorage.setItem('zoomLangs', JSON.stringify(res))
@@ -223,6 +238,8 @@ var zoom = {
     var res = null
     var xhr = new XMLHttpRequest()
     var data = {lang: localStorage.getItem('zoomLang')}
+    if ($('#azfname').length)
+      data.name = $('#azfname').val()
     if (deleteJoin)
       data.DELETEJOIN = deleteJoin
     xhr.onreadystatechange = function(e) {
@@ -239,6 +256,7 @@ var zoom = {
         delete xhr
       }
     }
+    console.log(data)
     xhr.open('POST', zoom.urls_startzoom, true)
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
     xhr.send(zoom.xhrData(data))
@@ -246,16 +264,79 @@ var zoom = {
   lunchMeeting: function(config) {
     zoom.appendIframe()
     config.lang = localStorage.getItem('zoomLang')
+    zoom.meetingId = config.meetingNumber
     var src = zoom.urls_meetinghtml + zoom.serialize(config)
     $(document).find('#zoom-iframe').attr('src', src)
     zoom.changeGamePanelStyle()
     zoom.removeDialog()
     $('#'+zoom.game).click()
+    zoom.shareLink()
+  },
+  shareLink: function() {
+    var hl = '<div _style="position:absolute;">'
+    hl += '<style>'
+    hl += '#azf-share{position:absolute;top:-.9rem;left:.3rem;}'
+    hl += '</style>'
+    hl += '<button id="azf-share">share</button>'
+    hl += '</div>'
+    var foo = document.getElementsByClassName('gamePanel')[0]
+    $(foo).css({position:'relative'}).append(hl)
+    $('#azf-share').click(function() {
+      var link = location.href + '?' + zoom.serialize({
+        meetingId: zoom.meetingId,
+        game: zoom.game
+      })
+      zoom.copyToClipboard(link)
+    })
+  },
+  copyToClipboard: function(text) {
+    console.log(text)
+    var del = document.createElement('input')
+    del.id = 'azf-del'
+    del.value = text
+    $('#azf-share').append($(del))
+    $('#azf-del').select()
+    document.execCommand('copy')
+    $('#azf-del').remove()
+  },
+  parseQuery: function() {
+    return (function () {
+      var href = window.location.href
+      var queryString = href.substr(href.indexOf("?"))
+      var query = {}
+      var pairs = (queryString[0] === "?"
+        ? queryString.substr(1)
+        : queryString
+      ).split("&")
+      for (var i = 0; i < pairs.length; i += 1) {
+        var pair = pairs[i].split("=")
+        query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || "")
+      }
+      return query
+    })()
+  },
+  beforeStart: function() {
+    var bar = zoom.parseQuery()
+    if (!bar.game || !bar.meetingId)
+      return zoom.start()
+    zoom.queryLangs()
+    zoom.assignment(bar.game)
+    zoom.getUser()
+    zoom.createDialog(true)
+    return false
+    $.ajax({
+      url: '',
+      data: bar,
+      success: function(res) {
+        console.log(res)
+      }
+    })
   }
 }
 
 
 
 $(document).ready(function() {
+  zoom.beforeStart()
   zoom.start()
 })
