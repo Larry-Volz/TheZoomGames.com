@@ -23,7 +23,9 @@ class Admin
     public function save()
     {
         $dao = new Config;
-        if ($dao->replace()->save($_POST))
+        foreach ($_POST as $key => $value)
+            $data[] = ['key' => $key, 'value' => $value];
+        if ($dao->replace()->saveAll($data))
             return 'success';
         else
             return 'fail';
