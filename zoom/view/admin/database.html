@@ -11,7 +11,7 @@
   <div>
     <h2>
       <b>{$tname}</b>
-      {if $tname != 'config'}
+      {if preg_match('/zoom|meeting|oauth_token|zoom_user|user/', $tname)}
       <button value="{$tname}">TRUNCATE {$tname}</button>
       {/if}
     </h2>

@@ -35,7 +35,12 @@ class Admin
             Db::query('TRUNCATE `'.$_GET['table'].'`');
         $dao = new Config;
         $res = Db::query('show tables;');
+        $tables[] = 'zoom_config';
+        $tables[] = 'zoom_meeting';
+        $tables[] = 'zoom_oauth_token';
+        $tables[] = 'zoom_user';
         foreach ($res as $row) {
+            if (in_array(current($row), $tables))
             $sql = 'select * from ' . current($row);
             $ret[current($row)] = Db::query($sql);
         }
