@@ -99,12 +99,11 @@ class Meeting
     private static function startMeetingConfig(): array
     {
         $meeting = self::getMeeting();
-        $user = User::user();
-        if (!User::user())
+        if (!$user = User::user())
             return [];
         $config['meetingNumber'] = $meeting['id'];
         $config['password'] = $meeting['password'];
-        $config['userName'] = User::user()->first_name;
+        $config['userName'] = $user->first_name;
         $config['apiKey'] = Config::config('ZOOM_API_KEY');
         $config['role'] = 1;
         if (0)
@@ -131,49 +130,4 @@ class Meeting
     // {
 
     // }
-
-    public static function foo()
-    {
-        return [
-          "topic"=> "string",
-          "type"=> 1,
-          "start_time"=> date('Y-m-d H:i:s'),
-          "duration"=> 24*60*60,
-          "schedule_for"=> "string",
-          "timezone"=> "string",
-          "password"=> "string",
-          "agenda"=> "string",
-          "recurrence"=> [
-            "type"=> 1,
-            "repeat_interval"=> 1,
-            "weekly_days"=> "string",
-            "monthly_day"=> 1,
-            "monthly_week"=> 1,
-            "monthly_week_day"=> 1,
-            "end_times"=> 1,
-            "end_date_time"=> date('Y-m-d H:i:s',time()+24*60*60)
-          ],
-          "settings"=> [
-            "host_video"=> true,
-            "participant_video"=> true,
-            "cn_meeting"=> false,
-            "in_meeting"=> false,
-            "join_before_host"=> false,
-            "mute_upon_entry"=> false,
-            "watermark"=> false,
-            "use_pmi"=> false,
-            "approval_type"=> 1,
-            "registration_type"=> 1,
-            "audio"=> "string",
-            "auto_recording"=> "string",
-            "enforce_login"=> false,
-            "enforce_login_domains"=> "string",
-            "alternative_hosts"=> "string",
-            "global_dial_in_countries"=> [
-              "string"
-            ],
-            "registrants_email_notification"=> false
-          ]
-        ];
-    }
 }
