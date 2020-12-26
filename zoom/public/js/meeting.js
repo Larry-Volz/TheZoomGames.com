@@ -15,6 +15,8 @@ console.log(parseQuery())
 joinMeeting(parseQuery())
 function joinMeeting(data)
 {
+  if (data.china)
+    ZoomMtg.setZoomJSLib("https://jssdk.zoomus.cn/1.8.3/lib", "/av")
   data.error = function(res) {
     console.clear()
     console.log(res)
