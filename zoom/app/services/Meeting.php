@@ -98,20 +98,23 @@ class Meeting
 
     private static function startMeetingConfig(): array
     {
-        $meeting = self::getMeeting();
-        if (!$user = User::user())
-            return [];
-        $config['meetingNumber'] = $meeting['id'];
-        $config['password'] = $meeting['password'];
-        $config['userName'] = $user->first_name;
-        $config['apiKey'] = Config::config('ZOOM_API_KEY');
         $config['role'] = 1;
-        if (0)
+        $config['apiKey'] = Config::config('ZOOM_API_KEY');
+
+        if (!$_POST['name'])
+        {
+            $meeting = self::getMeeting();
+            if (!$user = User::user())
+                return [];
+            $config['meetingNumber'] = $meeting['id'];
+            $config['password'] = $meeting['password'];
+            $config['userName'] = $user->first_name;
+        } else {
+            $config['meetingNumber'] = $_POST['meetingId'];
+            $config['userName'] = $_POST['name'];
+            $config['password'] = MeetingModel::getPassword($_POST['meetingId']);
             $config['role'] = 0;
-        $config['lang'] = $_POST['lang'];
-        $config['china'] = 0;
-        // if ($config['lang'] === 'zh-cn')
-        //     $config['china'] = 1;
+        }
         $config['signature'] = Foo::generateSignature(
             $config['apiKey'],
             Config::config('ZOOM_API_SECRET'),
@@ -123,11 +126,14 @@ class Meeting
 
     public static function startZoom()
     {
-        return self::startMeetingConfig();
+        if (1)
+            return self::startMeetingConfig();
+        else
+            return self::joinMeeting();
     }
 
-    // public static function checkWaiting()
-    // {
+    private static function joinMeeting()
+    {
 
-    // }
+    }
 }

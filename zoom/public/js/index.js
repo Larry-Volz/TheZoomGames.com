@@ -2,6 +2,7 @@ var zoom = {
   game: null,
   window: null,
   meetingId: null,
+  joinConfig: null,
   matchClearInterval: null,
   matchClearTimeout: null,
   matchTimeout: 60,
@@ -165,7 +166,7 @@ var zoom = {
     hl += '      </div>'
     hl += '      <div class="azf-button card-body">'
     hl += '        <input type="submit" id="azfsubmit">'
-    hl += '        <button id="deleteJoin">[DELETE] JOIN</button>'
+    hl += '        <button id="deleteJoin">[JWT] JOIN</button>'
     hl += '        <button id="startZoom">Start Zoom</button>'
     hl += '        <button id="azf-cancle">Cancle</button>'
     hl += '      </div>'
@@ -245,6 +246,8 @@ var zoom = {
     var res = null
     var xhr = new XMLHttpRequest()
     var data = {lang: localStorage.getItem('zoomLang')}
+    if (zoom.joinConfig.meetingId)
+      data.meetingId = zoom.joinConfig.meetingId
     if ($('#azfname').length)
       data.name = $('#azfname').val()
     if (deleteJoin)
@@ -263,8 +266,6 @@ var zoom = {
         delete xhr
       }
     }
-    console.log(data)
-    return false
     xhr.open('POST', zoom.urls_startzoom, true)
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
     xhr.send(zoom.xhrData(data))
@@ -324,17 +325,17 @@ var zoom = {
     })()
   },
   beforeStart: function() {
-    var bar = zoom.parseQuery()
-    if (!bar.game || !bar.meetingId)
+    zoom.joinConfig = zoom.parseQuery()
+    if (!zoom.joinConfig.game || !zoom.joinConfig.meetingId)
       return zoom.run()
     zoom.queryLangs()
-    zoom.assignment(bar.game)
+    zoom.assignment(zoom.joinConfig.game)
     zoom.getUser()
     zoom.createDialog(true)
     return false
     $.ajax({
       url: '',
-      data: bar,
+      data: zoom.joinConfig,
       success: function(res) {
         console.log(res)
       }

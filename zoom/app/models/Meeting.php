@@ -38,4 +38,15 @@ class Meeting extends Model
             self::$meeting = $bar->getData();
         return self::$meeting;
     }
+
+    public static function getPassword($meetingId=null): string
+    {
+        if ($meetingId !== null)
+        {
+            $bar = new self;
+            if ($bar = $bar->where(['meeting_id' => $meetingId])->find())
+                return $bar->getData('password');
+        }
+        return '';
+    }
 }
