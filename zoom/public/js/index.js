@@ -14,6 +14,7 @@ var zoom = {
   bg_color: null,
   color: null,
   zoomflag: false,
+  zoomdoublegetuserflag: false,
   session_key: 'awesomezoom',
   urls_meetinghtml: 'zoom/public/meeting.html?',
   /* apis */
@@ -54,12 +55,12 @@ var zoom = {
     zoom.bg_color = $('#'+id).css('background-color')
     zoom.color = $('#'+id).css('color')
   },
-  run: function() {
+  runOnce: function() {
     zoom.queryLangs()
     $(document).on('mousedown', zoom.selectors(), function(e) {
       console.log('mousedown here')
-      // if (zoom.zoomflag === true)
-      //   return true
+      if (zoom.zoomdoublegetuserflag === true)
+        return true
       zoom.assignment($(this).attr('id'))
       console.clear()
       zoom.getUser()
@@ -327,7 +328,7 @@ var zoom = {
   beforeStart: function() {
     zoom.joinConfig = zoom.parseQuery()
     if (!zoom.joinConfig.game || !zoom.joinConfig.meetingId)
-      return zoom.run()
+      return zoom.runOnce()
     zoom.queryLangs()
     zoom.assignment(zoom.joinConfig.game)
     zoom.getUser()
@@ -347,5 +348,5 @@ var zoom = {
 
 $(document).ready(function() {
   zoom.beforeStart()
-  zoom.run()
+  zoom.runOnce()
 })

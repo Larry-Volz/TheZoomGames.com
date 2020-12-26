@@ -35,6 +35,7 @@ class Admin
     {
         if (!empty($_GET['table']))
             Db::query('TRUNCATE `'.$_GET['table'].'`');
+        $ret = [];
         $dao = new Config;
         $res = Db::query('show tables;');
         $tables[] = 'zoom_config';
