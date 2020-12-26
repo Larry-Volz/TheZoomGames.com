@@ -90,7 +90,7 @@ class Zoom extends ZoomApiConfig
     public function __destruct()
     {
         if (!empty($_POST['DELETEJOIN']))
-            return true
+            return true;
         $obj = self::$zoomapiresult;
         if ($obj->lastReason() === 'Unauthorized')
             OAuth::requestToken();
