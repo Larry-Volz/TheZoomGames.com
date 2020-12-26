@@ -11,7 +11,6 @@ ZoomMtg.setZoomJSLib('https://dmogdx0jrul3u.cloudfront.net/1.8.3/lib', '/av')
 
 ZoomMtg.preLoadWasm()
 ZoomMtg.prepareJssdk()
-console.log(parseQuery())
 joinMeeting(parseQuery())
 function joinMeeting(data)
 {
@@ -50,7 +49,6 @@ function removeDivPhone()
     {
       clearInterval(foo)
     }
-    console.log('foo')
   },1000)
 }
 

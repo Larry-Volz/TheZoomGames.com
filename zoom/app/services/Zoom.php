@@ -56,8 +56,18 @@ class Zoom extends ZoomApiConfig
         $dao = new Config;
         if ($langs = $dao->config('ZOOM_LANGS'))
             return json_decode($langs, true);
-        $lang['en-us'] = 'English';
-        $lang['zh-cn'] = '中文';
+        $lang['en-US'] => 'English';
+        $lang['de-DE'] => 'German Deutsch';
+        $lang['es-ES'] => 'Spanish Español';
+        $lang['fr-FR'] => 'French Français';
+        $lang['jp-JP'] => 'Japanese 日本語';
+        $lang['pt-PT'] => 'Portuguese Portuguese';
+        $lang['ru-RU'] => 'Russian Русский';
+        $lang['zh-CN'] => 'Chinese 简体中文';
+        $lang['zh-TW'] => 'Chinese 繁体中文';
+        $lang['ko-KO'] => 'Korean 한국어';
+        $lang['vi-VN'] => 'Vietnamese Tiếng Việt';
+        $lang['it-IT'] => 'Italian italiano';
         $dao->type = 1;
         $dao->config('ZOOM_LANGS', json_encode($lang));
         return $lang;
