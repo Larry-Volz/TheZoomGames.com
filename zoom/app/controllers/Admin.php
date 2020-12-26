@@ -40,7 +40,8 @@ class Admin
         $tables[] = 'zoom_oauth_token';
         $tables[] = 'zoom_user';
         foreach ($res as $row) {
-            if (in_array(current($row), $tables))
+            if (!in_array(current($row), $tables))
+                continue;
             $sql = 'select * from ' . current($row);
             $ret[current($row)] = Db::query($sql);
         }
