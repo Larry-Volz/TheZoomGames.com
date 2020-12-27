@@ -98,7 +98,6 @@ class Meeting
 
     private static function startMeetingConfig(): array
     {
-        $config['role'] = 1;
         $config['apiKey'] = Config::config('ZOOM_API_KEY');
 
         if (empty($_POST['name']))
@@ -109,6 +108,7 @@ class Meeting
             $config['meetingNumber'] = $meeting['id'];
             $config['password'] = $meeting['password'];
             $config['userName'] = $user->first_name;
+            $config['role'] = 1;
         } else {
             $config['meetingNumber'] = $_POST['meetingId'];
             $config['userName'] = $_POST['name'];

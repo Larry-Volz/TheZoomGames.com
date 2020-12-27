@@ -21,6 +21,8 @@ function joinMeeting(data)
     isSupportAV: true,
     success: function() {
       // ZoomMtg.join(data)
+      console.log('meeting.js|joinMeeting()->ZoomMtg.init({success:()})')
+      console.log(data)
       $.i18n.reload(data.lang)
       ZoomMtg.join({
         signature: data.signature,
@@ -30,10 +32,14 @@ function joinMeeting(data)
         passWord: data.password,
         error: function(res) {
           console.clear()
+          console.log('ZoomMtg.join({error:()})')
+          console.log(data)
           removeDivPhone()
         },
         success: function(res) {
           console.clear()
+          console.log('ZoomMtg.join({success:()})')
+          console.log(data)
           removeDivPhone()
         }
       })
