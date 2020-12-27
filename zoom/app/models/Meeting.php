@@ -20,8 +20,8 @@ class Meeting extends Model
         $data['uuid'] = $arr['uuid'];
         $data['meeting_id'] = $arr['id'];
         $data['password'] = $arr['password'];
-        $data['start_url'] = $arr['start_url'];
-        $data['join_url'] = $arr['join_url'];
+        // $data['start_url'] = $arr['start_url'];
+        // $data['join_url'] = $arr['join_url'];
         $map['user_id'] = $data['user_id'];
         $bar = new self;
         if ($res = $bar->where($map)->find())
