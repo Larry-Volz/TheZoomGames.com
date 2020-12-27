@@ -25,7 +25,10 @@ class Meeting extends Model
         $map['user_id'] = $data['user_id'];
         $bar = new self;
         if ($res = $bar->where($map)->find())
+        {
+            unset($data['meeting_id']);
             return $bar->where($map)->replace()->save($data);
+        }
         return $bar->replace()->save($data);
     }
 
