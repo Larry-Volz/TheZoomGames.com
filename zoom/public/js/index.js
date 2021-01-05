@@ -140,7 +140,7 @@ var zoom = {
     hl += '    #azflang option{text-align:justify;text-justify: inter-word;}'
     hl += '  </style>'
     hl += '  <div class="azf-box shadow rounded">'
-    hl += '    <h5 class="azf-color card-body">Some step...</h5>'
+    hl += '    <h5 class="azf-color card-body">Sign in to Zoom</h5>'
     hl += '    <form id="azfform" onsubmit="javascript:return false">'
 
     if (askName) {
@@ -157,16 +157,16 @@ var zoom = {
       hl += '      </div>'
     }
 
-    hl += '      <div class="azf-input card-body">'
-    hl += '        <div>'
-    hl += '          <label for="azflang" class="azf-color">'
-    hl += '            <h3><b style="color:red;">*</b> <b>Set Zoom Language</b></h3>'
-    hl += '          </label>'
-    hl += '        </div>'
-    hl += '        <div>'
-    hl += '          <select id="azflang" name="azflang" required></select>'
-    hl += '        </div>'
-    hl += '      </div>'
+    // hl += '      <div class="azf-input card-body">'
+    // hl += '        <div>'
+    // hl += '          <label for="azflang" class="azf-color">'
+    // hl += '            <h3><b style="color:red;">*</b> <b>Set Zoom Language</b></h3>'
+    // hl += '          </label>'
+    // hl += '        </div>'
+    // hl += '        <div>'
+    // hl += '          <select id="azflang" name="azflang" required></select>'
+    // hl += '        </div>'
+    // hl += '      </div>'
     hl += '      <div class="azf-button card-body">'
     hl += '        <input type="submit" id="azfsubmit">'
     hl += '        <button id="deleteJoin">[JWT] JOIN</button>'  //ACTUAL JOIN BUTTON THAT IS LISTENED FOR ELSEWHERE #deleteJoin
