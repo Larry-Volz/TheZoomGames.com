@@ -26,10 +26,11 @@ var zoom = {
   /* apis */
   selectors: function() {
     return [
-      '#jeopardy-game', 
-      '#chess-game',
-      '#checkers-game',      //EVENT LISTENER SELECTORS FOR GAME BUTTONS
-      '#connect4-game'
+      // '#jeopardy-game', 
+      // '#chess-game',
+      // '#checkers-game',      //EVENT LISTENER SELECTORS FOR GAME BUTTONS
+      // '#connect4-game'
+      '#zoomConnectBtn'
     ].toString()
   },
   zoomflagCheck: function(val) {
@@ -169,8 +170,8 @@ var zoom = {
     // hl += '      </div>'
     hl += '      <div class="azf-button card-body">'
     hl += '        <input type="submit" id="azfsubmit">'
-    hl += '        <button id="deleteJoin">[JWT] JOIN</button>'  //ACTUAL JOIN BUTTON THAT IS LISTENED FOR ELSEWHERE #deleteJoin
-    hl += '        <button id="startZoom">Start Zoom</button>'
+    hl += '        <button id="deleteJoin">Start Zoom</button>'  //ACTUAL JOIN BUTTON THAT IS LISTENED FOR ELSEWHERE #deleteJoin because we will want to delete it and use the one below when we go to oAuth upon approval by Zoom
+    // hl += '        <button id="startZoom">Start Zoom</button>'
     hl += '        <button id="azf-cancle">Cancel</button>'
     hl += '      </div>'
     hl += '    </form>'
