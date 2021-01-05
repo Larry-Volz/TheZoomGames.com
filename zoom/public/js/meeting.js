@@ -16,7 +16,7 @@ function joinMeeting(data)
 {
   if (data.china)
     ZoomMtg.setZoomJSLib("https://jssdk.zoomus.cn/1.8.3/lib", "/av")
-  ZoomMtg.init({
+  ZoomMtg.init({                        //CONFIGURATION VARIABLES FROM THE LAUNCHMEETING FUNCTION
     leaveUrl: './thanks.html',
     isSupportAV: true,
     success: function() {
