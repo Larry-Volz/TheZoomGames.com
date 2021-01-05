@@ -18,11 +18,11 @@ var zoom = {
   session_key: 'awesomezoom',
   urls_meetinghtml: 'zoom/public/meeting.html?',   //URL'S FOR VARIOUS THINGS
   /* apis */
-  urls_querylangs: './queryLangs',
-  urls_getuser: './getUser',
-  urls_startzoom: './startZoom',
+  urls_querylangs: 'https://www.thezoomgames.com/queryLangs',
+  urls_getuser: 'https://www.thezoomgames.com/getUser',
+  urls_startzoom: 'https://www.thezoomgames.com/startZoom',
 
-  urls_setname: './setName',
+  urls_setname: 'https://www.thezoomgames.com/setName',
   /* apis */
   selectors: function() {
     return [
