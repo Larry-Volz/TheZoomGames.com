@@ -16,7 +16,7 @@ var zoom = {
   zoomflag: false,
   zoomdoublegetuserflag: false,
   session_key: 'awesomezoom',
-  urls_meetinghtml: 'zoom/public/meeting.html?',
+  urls_meetinghtml: 'zoom/public/meeting.html?',   //URL'S FOR VARIOUS THINGS
   /* apis */
   urls_querylangs: './queryLangs',
   urls_getuser: './getUser',
@@ -26,9 +26,9 @@ var zoom = {
   /* apis */
   selectors: function() {
     return [
-      '#jeopardy-game',
+      '#jeopardy-game', 
       '#chess-game',
-      '#checkers-game',
+      '#checkers-game',      //EVENT LISTENER SELECTORS FOR GAME BUTTONS
       '#connect4-game'
     ].toString()
   },
@@ -57,7 +57,7 @@ var zoom = {
   },
   runOnce: function() {
     zoom.queryLangs()
-    $(document).on('mousedown', zoom.selectors(), function(e) {
+    $(document).on('mousedown', zoom.selectors(), function(e) {  //EVENT LISTENER FOR BUTTONS 
       // console.log('mousedown here')
       if (zoom.zoomdoublegetuserflag === true)
         return true
@@ -98,7 +98,7 @@ var zoom = {
     zoom.iframe.id = 'zoom-iframe'
     return zoom.iframe
   },
-  appendIframe: function() {
+  appendIframe: function() {  //WHERE APPENDING THE IFRAME WHERE THE OLD PICTURE WAS
     zoom.genIframe()
     var foo = document.getElementsByClassName('gamePanel')[0]
     foo.innerText = ''
@@ -123,7 +123,7 @@ var zoom = {
       $(document).find('head').append(style)
     })
   },
-  createDialog: function(askName=false) {
+  createDialog: function(askName=false) { //CREATING DIALOG POP-UP MODAL ASKING FOR START OF GAME
     var bg_color = zoom.bg_color
     var color = zoom.color
     var hl = '<div style="left:0;top:0;height:100%;width:100%;position:absolute;" class="azf" id="zoom-form">'
@@ -169,9 +169,9 @@ var zoom = {
     hl += '      </div>'
     hl += '      <div class="azf-button card-body">'
     hl += '        <input type="submit" id="azfsubmit">'
-    hl += '        <button id="deleteJoin">[JWT] JOIN</button>'
+    hl += '        <button id="deleteJoin">[JWT] JOIN</button>'  //ACTUAL JOIN BUTTON THAT IS LISTENED FOR ELSEWHERE #deleteJoin
     hl += '        <button id="startZoom">Start Zoom</button>'
-    hl += '        <button id="azf-cancle">Cancle</button>'
+    hl += '        <button id="azf-cancle">Cancel</button>'
     hl += '      </div>'
     hl += '    </form>'
     hl += '  </div>'
@@ -182,6 +182,7 @@ var zoom = {
       zoom.removeDialog()
       return false
     })
+    //FORM VALIDATION
     $('#startZoom').on('click', function() {
       $('#azfsubmit').click()
       $('#azfform').submit(function() {
@@ -189,11 +190,11 @@ var zoom = {
           return false
         zoom.zoomflag = true
 
-        zoom.startZoom()
+        zoom.startZoom()   //**************** START ZOOM **********************
         return false
       })
     })
-    $('#deleteJoin').on('click', function() {
+    $('#deleteJoin').on('click', function() {  //EVENT LISTENER FOR THE POP-UP MODAL BOX
       $('#azfsubmit').click()
       $('#azfform').submit(function() {
         if (zoom.zoomflag)
@@ -244,6 +245,8 @@ var zoom = {
       localStorage.setItem('zoomLangs', JSON.stringify(res))
     })
   },
+  
+  //DOES API CALL TO CONNECT TO ZOOM SDK
   startZoom: function(deleteJoin) {
     $('#startZoom').attr('disabled', true).text('Waiting...')
     var res = null
@@ -261,7 +264,7 @@ var zoom = {
       if (xhr.response)
         res = JSON.parse(xhr.response)
       if ((xhr.readyState === 4) && (xhr.status === 200)) {
-        zoom.lunchMeeting(res)
+        zoom.lunchMeeting(res)  //LAUNCHING ZOOM MEETING
       }
 
       if ((xhr.status === 1010) && (xhr.readyState === 3)) {
