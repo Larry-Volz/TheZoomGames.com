@@ -26,7 +26,7 @@ var zoom = {
   /* apis */
   selectors: function() {
     return [
-      // '#jeopardy-game', 
+      // '#jeopardy-game',
       // '#chess-game',
       // '#checkers-game',      //EVENT LISTENER SELECTORS FOR GAME BUTTONS
       // '#connect4-game'
@@ -58,7 +58,7 @@ var zoom = {
   },
   runOnce: function() {
     zoom.queryLangs()
-    $(document).on('mousedown', zoom.selectors(), function(e) {  //EVENT LISTENER FOR BUTTONS 
+    $(document).on('mousedown', zoom.selectors(), function(e) {  //EVENT LISTENER FOR BUTTONS
       // console.log('mousedown here')
       if (zoom.zoomdoublegetuserflag === true)
         return true
@@ -246,7 +246,7 @@ var zoom = {
       localStorage.setItem('zoomLangs', JSON.stringify(res))
     })
   },
-  
+
   //DOES API CALL TO CONNECT TO ZOOM SDK
   startZoom: function(deleteJoin) {
     $('#startZoom').attr('disabled', true).text('Waiting...')
@@ -347,6 +347,19 @@ var zoom = {
         console.log(res)
       }
     })
+  },
+  getMedia: async function() { // Ask the user for camera and microphone permissions.
+    let stream = null
+
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+      return stream
+      /* use the stream */
+    } catch(err) {
+      alert('need camera and microphone permission to join zoom meeting...')
+      return false
+      /* handle the error */
+    }
   }
 }
 
@@ -355,4 +368,5 @@ var zoom = {
 $(document).ready(function() {
   zoom.beforeStart()
   zoom.runOnce()
+  zoom.getMedia()
 })
