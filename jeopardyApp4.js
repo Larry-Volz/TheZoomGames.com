@@ -1,21 +1,8 @@
 /**
 
-TODO: Sign-in screen (it's free to play - use your own zoom account)
-    TODO: Put in user db, ask about news on new games checkbox
-TODO: Start a game/join a game screen
-    START GAME:
-        TODO:  Start -> create board and do initial insert to db -> Put game number on screen for players
-        TODO: Retrieve game ID to show for game-starter
-    JOIN GAME:
-        TODO: make a form to input game ID
-        TODO: query db by game id -> populate player's board from db and adapt current code for play
-TODO: Make an update function for when any player plays a question
-    TODO: Active player pushes updated info to db
-    TODO: DB pushes updates to other players or other players query db at interrupts for updates
-    TODO: include scoring updates
-TODO: SET UP current player function - can't click screen unless it's your turn(?)
+DONE: When the user clicks the “Restart” button at the bottom of the page, it should load new categories and questions.
 
-TODO: When the user clicks the “Restart” button at the bottom of the page, it should load new categories and questions.
+DONE: try-catch block in case can't connect. 
 
 DEVELOPMENT OPTIONS FOR LATER
 - add cool animation and graphics
@@ -92,27 +79,28 @@ let getRND = () => Math.floor(Math.random()*18430);
 
 
 
+getQuestions();
+
+
+
 
 
 async function getQuestions() {
     let vAbbrev, aAbbrev, qAbbrev;
-    let v, a, q;
+    let v, a, q;  //value answer questions
 
     let validCategories = 0;
     let failureFlag = false;
     
         do{
-
-        url = `https://jservice.io/api/category?id=${getRND()}`
-        apiResponse = await axios.get(url)
-        .then((res)=>{
-            // console.log("res: ",res)
-            return res;
-        }).then((apiResponse)=>{
-
-             //category = the key to each array-object
-             let category = apiResponse.data.title;
-
+            try {
+            apiResponse = await axios.get(`http://jservice.io/api/category?id=${getRND()}`);
+            } catch(e) {
+                console.log(`ERROR THROWN at apiResponse e= ${e}`);
+            }
+            
+            //category = the key to each array-object
+            let category = apiResponse.data.title;
 
             //array of clues (q's, a's and v's) are the VALUES to the key [category]
             //   array[key]    :   [{values}. {}...{}]
@@ -152,161 +140,32 @@ async function getQuestions() {
                     categories = [];
                     failureFlag = 0;
                 }
-            })
-
-            
+        
 
         } while (validCategories < 6)
 
+        // console.log(categories);
+
+
 
     fillBoard(categories);
-
-    insertSql(categories);
 
     gameLoop(categories);
 
     playAgain();
 }
 
-
-
-function insertSql(categories) {
-
-    //insert CATEGORY TITLES into sql db
-    const catArr = Object.keys(categories);
-
-    //BRUTE FORCE PROGRAMMING UNTIL I CAN LEARN THE PROPER PHP SYNTAX TO DO IT IN A LOOP OR PASS ARRAYS
-
-    $.post(
-        'sql_initial_insert.php', 
-        {
-        cat0 : sqlStringCleaner(catArr[0]),
-        cat1 : sqlStringCleaner(catArr[1]),
-        cat2 : sqlStringCleaner(catArr[2]),
-        cat3 : sqlStringCleaner(catArr[3]),
-        cat4 : sqlStringCleaner(catArr[4]),
-        cat5 : sqlStringCleaner(catArr[5]),
-        
-        cat0_row0_q : sqlStringCleaner(categories[catArr[0]][0].question),
-        cat0_row1_q : sqlStringCleaner(categories[catArr[0]][1].question),
-        cat0_row2_q : sqlStringCleaner(categories[catArr[0]][2].question),
-        cat0_row3_q : sqlStringCleaner(categories[catArr[0]][3].question),
-        cat0_row4_q : sqlStringCleaner(categories[catArr[0]][4].question),
-
-        cat1_row0_q : sqlStringCleaner(categories[catArr[1]][0].question),
-        cat1_row1_q : sqlStringCleaner(categories[catArr[1]][1].question),
-        cat1_row2_q : sqlStringCleaner(categories[catArr[1]][2].question),
-        cat1_row3_q : sqlStringCleaner(categories[catArr[1]][3].question),
-        cat1_row4_q : sqlStringCleaner(categories[catArr[1]][4].question),
-
-        cat2_row0_q : sqlStringCleaner(categories[catArr[2]][0].question),
-        cat2_row1_q : sqlStringCleaner(categories[catArr[2]][1].question),
-        cat2_row2_q : sqlStringCleaner(categories[catArr[2]][2].question),
-        cat2_row3_q : sqlStringCleaner(categories[catArr[2]][3].question),
-        cat2_row4_q : sqlStringCleaner(categories[catArr[2]][4].question),
-
-        cat3_row0_q : sqlStringCleaner(categories[catArr[3]][0].question),
-        cat3_row1_q : sqlStringCleaner(categories[catArr[3]][1].question),
-        cat3_row2_q : sqlStringCleaner(categories[catArr[3]][2].question),
-        cat3_row3_q : sqlStringCleaner(categories[catArr[3]][3].question),
-        cat3_row4_q : sqlStringCleaner(categories[catArr[3]][4].question),
-
-        cat4_row0_q : sqlStringCleaner(categories[catArr[4]][0].question),
-        cat4_row1_q : sqlStringCleaner(categories[catArr[4]][1].question),
-        cat4_row2_q : sqlStringCleaner(categories[catArr[4]][2].question),
-        cat4_row3_q : sqlStringCleaner(categories[catArr[4]][3].question),
-        cat4_row4_q : sqlStringCleaner(categories[catArr[4]][4].question),
-
-        cat5_row0_q : sqlStringCleaner(categories[catArr[5]][0].question),
-        cat5_row1_q : sqlStringCleaner(categories[catArr[5]][1].question),
-        cat5_row2_q : sqlStringCleaner(categories[catArr[5]][2].question),
-        cat5_row3_q : sqlStringCleaner(categories[catArr[5]][3].question),
-        cat5_row4_q : sqlStringCleaner(categories[catArr[5]][4].question),
-
-        cat0_row0_a : sqlStringCleaner(categories[catArr[0]][0].answer),
-        cat0_row1_a : sqlStringCleaner(categories[catArr[0]][1].answer),
-        cat0_row2_a : sqlStringCleaner(categories[catArr[0]][2].answer),
-        cat0_row3_a : sqlStringCleaner(categories[catArr[0]][3].answer),
-        cat0_row4_a : sqlStringCleaner(categories[catArr[0]][4].answer),
-
-        cat1_row0_a : sqlStringCleaner(categories[catArr[1]][0].answer),
-        cat1_row1_a : sqlStringCleaner(categories[catArr[1]][1].answer),
-        cat1_row2_a : sqlStringCleaner(categories[catArr[1]][2].answer),
-        cat1_row3_a : sqlStringCleaner(categories[catArr[1]][3].answer),
-        cat1_row4_a : sqlStringCleaner(categories[catArr[1]][4].answer),
-
-        cat2_row0_a : sqlStringCleaner(categories[catArr[2]][0].answer),
-        cat2_row1_a : sqlStringCleaner(categories[catArr[2]][1].answer),
-        cat2_row2_a : sqlStringCleaner(categories[catArr[2]][2].answer),
-        cat2_row3_a : sqlStringCleaner(categories[catArr[2]][3].answer),
-        cat2_row4_a : sqlStringCleaner(categories[catArr[2]][4].answer),
-
-        cat3_row0_a : sqlStringCleaner(categories[catArr[3]][0].answer),
-        cat3_row1_a : sqlStringCleaner(categories[catArr[3]][1].answer),
-        cat3_row2_a : sqlStringCleaner(categories[catArr[3]][2].answer),
-        cat3_row3_a : sqlStringCleaner(categories[catArr[3]][3].answer),
-        cat3_row4_a : sqlStringCleaner(categories[catArr[3]][4].answer),
-
-        cat4_row0_a : sqlStringCleaner(categories[catArr[4]][0].answer),
-        cat4_row1_a : sqlStringCleaner(categories[catArr[4]][1].answer),
-        cat4_row2_a : sqlStringCleaner(categories[catArr[4]][2].answer),
-        cat4_row3_a : sqlStringCleaner(categories[catArr[4]][3].answer),
-        cat4_row4_a : sqlStringCleaner(categories[catArr[4]][4].answer),
-
-        cat5_row0_a : sqlStringCleaner(categories[catArr[5]][0].answer),
-        cat5_row1_a : sqlStringCleaner(categories[catArr[5]][1].answer),
-        cat5_row2_a : sqlStringCleaner(categories[catArr[5]][2].answer),
-        cat5_row3_a : sqlStringCleaner(categories[catArr[5]][3].answer),
-        cat5_row4_a : sqlStringCleaner(categories[catArr[5]][4].answer)
-        },
-        function( data ) {
-            console.log( "Data Loaded: " + data );
-        });
-
-    
-}
-
-
-function sqlStringCleaner(str){
-    str = str.replace(/\"/g, "''").replace(/\'/g, "''");
-    return str;
-}
-
-   
+$(`#cat0`).html('<img src="images/Spinner-1s-200px.gif" id="spinner">');
+$(`#cat1`).text("GETTING QUESTIONS");
 
 function fillBoard(categories){
-    let points;
+    let scr;
 
     //for each column fill in category at the top
+    ////console.log('OBJECT KEYS')
     const catArr = Object.keys(categories);
-
-    
-
-
-    // for (let i = 0; i <6; i++){
-
-    //     // console.log(`CATEGORY ${i}: ${catArr[i]}`);
-
-    //     //post category array to zoom_games_db_connections.php
-    //     //make string literal into a string so it will work in $.post format
-    //     str = `catArr[${i}]`;
-
-    //     $.post(
-    //         'sql_initial_insert.php', 
-    //         { str : catArr[i]}, 
-    //         function(response) {
-    //             console.log("POSTING categoryArray - RESPONSE: ", response);
-    //         }
-    //     );
-
-    // }// end of initial category insertion
-
     //for each cell fill in the values
     catArr.forEach((cat, idx) =>{
-
-
-        
-
        
         //cat0 - cat5 are the header cells
         $(`#cat${idx}`).text(cat);
@@ -320,14 +179,13 @@ function fillBoard(categories){
             //     return false;
             // }
 
-            points = (idx+1)*200;
+            scr = (idx+1)*200;
             // console.log(`categories[cat][idx].value = ${categories[cat][idx].value}`)
             try {
                 // console.log(`cat-${i}:  ${cat}`)
                 if (idx < 5) {
-                    categories[cat][idx].value = points;
+                    categories[cat][idx].value = scr;
                 }
-            
 
         } catch(e) {
             console.log(categories[cat][idx]);
@@ -336,13 +194,34 @@ function fillBoard(categories){
             console.log(`**** ERROR **** = ${e}`)
            // location.reload();
         }
-            //print to board
-            $(`#${idx}${i}`).text(points);
-            // console.log($(`#${idx}${i}`));
-            
+            $(`#${idx}${i}`).text(scr);
         }
     });
 }
+
+
+function clearBoard(){
+    let scr="...";
+    console.log("clearBoard() reached")
+
+    $(`#cat0`).html('<img src="images/Spinner-1s-200px.gif" id="spinner">');
+    $(`#cat1`).text("GETTING QUESTIONS");
+
+       
+    for (let k=2; k<6; k++){
+        //cat0 - cat5 are the header cells
+        // console.log(`#cat${i}`)
+        $(`#cat${k}`).text("");
+        // console.log(document.getElementById(`cat${i}`).innerText) // = "";
+    }
+
+    for (let j = 0; j <5; j ++){
+        for (let k=0; k< 6;k++){
+            $(`#${j}${k}`).text("");
+        }
+    }
+
+    }; //end of clearBoard()
 
 
  function gameLoop(categories){
@@ -353,7 +232,6 @@ function fillBoard(categories){
     let boardCellCount = 0;
 
     //put event listeners on all the td's
-   
     $(".table").on("click", (evt) => {
         $id = $(evt.target).attr('id');
 
@@ -412,7 +290,7 @@ function fillBoard(categories){
 
     //is board full (boardCellcount = 30)? yes -> alert GAME OVER
 
-    //new game button clicked? -> refresh pointseen
+    //new game button clicked? -> refresh screen
     
     //TODO: set up interactive score cards
     $("#player1").on("click", () =>{
@@ -441,16 +319,6 @@ function fillBoard(categories){
         cell.classList.add("bg-danger");
         cell.classList.add("text-light");
     });
-
-    $("#player4").on("click", () =>{
-        // ////console.log(`player3 clicked: earned ${v}`);
-        p4Score += v;
-        $("#p4-score").text(p4Score);
-        v=0
-        cell.classList.add("bg-danger");
-        cell.classList.add("text-light");
-    });
-
         
     });
     
@@ -459,25 +327,25 @@ function fillBoard(categories){
 }
 
 
-
- 
-
 function isGameOver(){
-    //
+    //Check to see if all questions are answered
 }
 
 function playAgain(){
-    $("#reload").on("click", ()=> location.reload())
+    // $("#reload").on("click", ()=> location.reload())
+    $("#reload").on("click", ()=> {
+        
+        clearBoard();
+        // setTimeout(()=>{
+            
+        // },500);
+
+        getQuestions()
+        .then(()=>{fillBoard(categories)})
+        .then(()=>{gameLoop(categories)})
+        
+    });
 }
 
 
 
-// function processApiResponse(apiResponse){
-//     //I think actually I'll want to feed it categories[]?
-//     ////console.log(apiResponse);
-
-//     let questions = apiResponse.data.clues;
-//     questions.forEach((element, index) => {
-//         createQuestionBlock(element, index);
-        
-//     });

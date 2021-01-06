@@ -4,6 +4,11 @@ body {
     background-color: black;
     cursor: default;
 }
+
+#spinner {
+    width: 100px;
+    height: 100px;
+}
 #jeopardy-table {
     width: 100%;
 }
