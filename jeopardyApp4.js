@@ -85,7 +85,7 @@ getQuestions();
 
 
 
-async function getQuestions() {
+async function getQuestions() { 
     let vAbbrev, aAbbrev, qAbbrev;
     let v, a, q;  //value answer questions
 
@@ -144,7 +144,7 @@ async function getQuestions() {
 
         } while (validCategories < 6)
 
-        // console.log(categories);
+        console.log(categories);
 
 
 
@@ -202,12 +202,10 @@ function fillBoard(categories){
 
 function clearBoard(){
     let scr="...";
-    console.log("clearBoard() reached")
 
     $(`#cat0`).html('<img src="images/Spinner-1s-200px.gif" id="spinner">');
     $(`#cat1`).text("GETTING QUESTIONS");
 
-       
     for (let k=2; k<6; k++){
         //cat0 - cat5 are the header cells
         // console.log(`#cat${i}`)
@@ -217,7 +215,8 @@ function clearBoard(){
 
     for (let j = 0; j <5; j ++){
         for (let k=0; k< 6;k++){
-            $(`#${j}${k}`).text("");
+            $(`#${j}${k}`).text("")
+            .removeClass("bg-warning bg-danger bg-success bg-info")
         }
     }
 
@@ -226,60 +225,70 @@ function clearBoard(){
 
  function gameLoop(categories){
     let $id, colId, colText, $rowId, cell, cellText, q, a, v;
-    let p1Score = 0;
-    let p2Score = 0;
-    let p3Score = 0;
+    let [p1Score, p2Score, p3Score, p4Score] = [0,0,0,0];
+   
     let boardCellCount = 0;
 
     //put event listeners on all the td's
     $(".table").on("click", (evt) => {
-        $id = $(evt.target).attr('id');
 
-     colId = `cat${$id.slice(1)}`; 
-     colText = document.getElementById(colId).innerText;
-     $rowId = $id.slice(0,1);
+        let targetName = evt.target.nodeName;
+        //don't react to table headings
+        if (targetName != "TH"){
+
+            console.log(`$evt ${$(evt.target).attr('id')}`)
+
+            $id = $(evt.target).attr('id');
+
+            colId = `cat${$id.slice(1)}`; 
+            colText = document.getElementById(colId).innerText;
+            $rowId = parseInt($id.slice(0,1));
+            
+            cell = document.getElementById($id);
+            cellText = cell.innerText;
+
+            
+
+            q = categories[colText][$rowId]["question"];
+            a = categories[colText][$rowId]["answer"];
+            v = parseInt(categories[colText][$rowId]["value"]);
+
+            //TODO: check a for <i> and </i> and remove them
+            
+        
+            //is the board cell == v?
+            ////console.log(`cellText: ${cellText} v: ${v} \nq: ${q}\na: ${a}`);
+            if (parseInt(cellText) == v){
+                // cell.innerHTML = q;
+                document.getElementById("qDisplay").innerText = q;
+                document.getElementById("aDisplay").innerText = a;
+
+                $('#qModal').modal('show');
+                $('#aModal').modal('show');
+
+
+                setTimeout(()=>{
+                    cell.style.fontSize = "xx-small;"
+                    cell.innerHTML = a;
+                }, 1000);
+                
+                
+                // cell.classList.add("text-primary");
+                
+
+            
     
-    cell = document.getElementById($id);
-    cellText = cell.innerText;
+        } 
+        //else if (cellText == q){
+        //     cell.innerHTML = a;
+        // }
 
-    q = categories[colText][$rowId]["question"];
-    a = categories[colText][$rowId]["answer"];
-    v = parseInt(categories[colText][$rowId]["value"]);
+        $('#qModal').on('hidden.bs.modal', function (e) {
+            document.getElementById("qDisplay").innerText = "";
+        })
 
-    //TODO: check a for <i> and </i> and remove them
-    
-  
-    //is the board cell == v?
-    ////console.log(`cellText: ${cellText} v: ${v} \nq: ${q}\na: ${a}`);
-    if (parseInt(cellText) == v){
-        // cell.innerHTML = q;
-        document.getElementById("qDisplay").innerText = q;
-        document.getElementById("aDisplay").innerText = a;
-
-        $('#qModal').modal('show');
-        $('#aModal').modal('show');
-
-
-         setTimeout(()=>{
-             cell.style.fontSize = "xx-small;"
-             cell.innerHTML = a;
-         }, 1000);
-        
-        
-        // cell.classList.add("text-primary");
-        
-
-        
-   
-     } 
-     //else if (cellText == q){
-    //     cell.innerHTML = a;
-    // }
-
-    $('#qModal').on('hidden.bs.modal', function (e) {
-        document.getElementById("qDisplay").innerText = "";
-      })
-
+        }
+    });
     // $("#getAnswer").on("click", (cell, a) => {
     //     console.log(`cell: ${cell},  a: ${a}`);
     //     cell.innerHTML = a;
@@ -292,9 +301,9 @@ function clearBoard(){
 
     //new game button clicked? -> refresh screen
     
-    //TODO: set up interactive score cards
+    //DONE: set up interactive score cards
     $("#player1").on("click", () =>{
-        // ////console.log(`player1 clicked: earned ${v}`);
+        console.log(`player1 clicked: earned ${v}`);
         p1Score += v;
         $("#p1-score").text(p1Score);
         v=0
@@ -303,7 +312,7 @@ function clearBoard(){
     });
 
     $("#player2").on("click", () =>{
-        // ////console.log(`player2 clicked: earned ${v}`);
+        console.log(`player2 clicked: earned ${v}`);
         p2Score += v;
         $("#p2-score").text(p2Score);
         v=0
@@ -312,15 +321,24 @@ function clearBoard(){
     });
 
     $("#player3").on("click", () =>{
-        // ////console.log(`player3 clicked: earned ${v}`);
+        console.log(`player3 clicked: earned ${v}`);
         p3Score += v;
         $("#p3-score").text(p3Score);
         v=0
         cell.classList.add("bg-danger");
         cell.classList.add("text-light");
     });
-        
+
+    $("#player4").on("click", () =>{
+        console.log(`player4 clicked: earned ${v}`);
+        p4Score += v;
+        $("#p4-score").text(p4Score);
+        v=0
+        cell.classList.add("bg-info");
+        cell.classList.add("text-light");
     });
+        
+    
     
   
    
