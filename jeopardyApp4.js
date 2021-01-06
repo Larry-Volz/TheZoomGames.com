@@ -82,8 +82,8 @@ let getRND = () => Math.floor(Math.random()*18430);
 getQuestions();
 
 // FUNCTION TO START ANOTHER GAME
-$("#reload").on("click", ()=> {
-        
+$("#reload").on("click", (e)=> {
+    e.preventDefault();
     clearBoard();
     // setTimeout(()=>{
         
