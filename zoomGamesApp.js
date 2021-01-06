@@ -12,6 +12,47 @@ button and update the screen on both sides if so
 - finish Zoom set-up
 */
 
+const initGamePanel = `
+<div class="col-lg-5  bg-warning zoomPanel p-3 mx-0 border rounded shadow align-content-center">
+
+<div id = "game-area">
+    <div class="card bg-success  text-white mt-3">
+        <div class="card-body justify-content-center text-center display-5">
+            <h5>Pick a Game</h5>
+
+            <div class="point-btn card bg-info">
+                <div id="jeopardy-game" class="alert-danger card-body">
+                    Jeopardy
+                </div>
+            </div>
+
+            <div class="point-btn card bg-success">
+                <div id="checkers-game" class=" alert-success card-body">
+                    Checkers
+                    (in development - only one player can move pieces)
+                </div>
+            </div>
+
+            <div class="point-btn card bg-danger">
+                <div id="connect4-game" class="alert-warning card-body">
+                    Connectix <br>(in development - resets zoom meeting)
+                </div>
+            </div>
+
+            
+
+            <div class="point-btn card bg-primary">
+                <div id="chess-game" class=" alert-primary card-body">
+                    Chess (under development)
+                </div>
+            </div>
+
+        </div>
+        </div>
+
+    </div>
+</div>
+`;
 const chessModule = `<div class = "box">
 <h1 class = "text-center">Cheeky Chess</h1>
     <table class ="content">
@@ -106,21 +147,22 @@ const chessModule = `<div class = "box">
 </div>`;
 
 const jeopardyModule = `
-<div class="container mt-2">
+<div class="container mt-2 jeop-container">
         <div class = "row">
-            <h1 class = "display-4 text-light m-2">Jeopardy</h1>"
+            <h1 class = "display-4 text-light m-2 jeop-h1">Jeopardy</h1>"
         </div>
         <div class="row">
-            <table id="jeopardy-table" class="table table-dark bg-primary m-2">
-                <thead>
+            <table class="table table-dark bg-primary m-2 jeop-table">
+                <thead class="jeop-thead">
                     <tr>
-                        <th scope = "col" id = "cat0"></th>
-                        <th scope = "col" id = "cat1"></th>
-                        <th scope = "col" id = "cat2"></th>
-                        <th scope = "col" id = "cat3"></th>
-                        <th scope = "col" id = "cat4"></th>
-                        <th scope = "col" id = "cat5"></th>
+                        <th scope = "col" class = "jeop-th" id = "cat1"></th>
+                        <th scope = "col" class = "jeop-th" id = "cat0"></th>
+                        <th scope = "col" class = "jeop-th" id = "cat2"></th>
+                        <th scope = "col" class = "jeop-th" id = "cat3"></th>
+                        <th scope = "col" class = "jeop-th" id = "cat4"></th>
+                        <th scope = "col" class = "jeop-th" id = "cat5"></th>
                     </tr>
+                </thead>
                     <tr id="row0" class = "text-warning">
                         <td id="00"></td>
                         <td id="01"></td>
@@ -162,22 +204,22 @@ const jeopardyModule = `
                         <td id="45"></td>
                     </tr>
 
-                </thead>
+                
             </table>
         </div>
         <div class="row justify-content-center">
-            <div id = "player1" class="point-btn col-3 bg-success m-2  border rounded">Player 1
+            <div id = "player1" class="col-2 bg-success m-2  border rounded player-btn">Player 1
                 <p>Score: <span id="p1-score">0</span></p>
             </div>
-            <div id = "player2" class="point-btn col-3 bg-warning m-2  border rounded">Player 2
+            <div id = "player2" class="col-2 bg-warning m-2  border rounded player-btn">Player 2
                 <p>Score: <span id="p2-score">0</span></p>
             </div>
-            <div id = "player3" class="point-btn col-3 bg-danger m-2  border rounded">Player 3
+            <div id = "player3" class="col-2 bg-danger m-2  border rounded player-btn">Player 3
                 <p>Score: <span id="p3-score">0</span></p>
             </div>
-        </div>
-        <div class="row justify-content-center">
-            <p class = "text-primary">Click the button if you/your team get a correct answer</p>
+            <div id = "player4" class="col-2 bg-info m-2  border rounded player-btn">Player 4
+                <p>Score: <span id="p4-score">0</span></p>
+            </div>
         </div>
         <div class="row justify-content-center">
             <button class = " btn btn-info border rounded mt-5" id = "reload">Restart Game</button>
@@ -306,8 +348,11 @@ const checkersModule = `
     </div>
 </div>
 <div class = "row justify-content-center">
-    <div class ="col-12">
+    <div class ="col-5">
         <button id="cleargame" class = "btn btn-primary mt-2">Reset Game</button>
+    </div>
+    <div class ="col-5">
+        <button id="main-menu" class = "btn btn-success mt-2">Main Menu</button>
     </div>
 </div>
 
@@ -324,12 +369,14 @@ window.onload = function() {
     })
 
 
-    $("#chess-game").on("click", () => {
-        console.log("clicked")
+    // $("#chess-game").on("click", () => {
+    //     console.log("clicked")
 
-        document.getElementById("game-area").innerHTML = chessModule;
-        // chessGame();
-    })
+    //     document.getElementById("game-area").innerHTML = chessModule;
+    //     // chessGame();
+    // })
+
+    
 
     $("#checkers-game").on("click", () => {
         console.log("clicked")
@@ -337,6 +384,8 @@ window.onload = function() {
         document.getElementById("game-area").innerHTML = checkersModule;
         playCheckers();
     })
+
+
 
     $("#connect4-game").on("click", () => {
         document.getElementById("game-area").innerHTML = connect4Module;

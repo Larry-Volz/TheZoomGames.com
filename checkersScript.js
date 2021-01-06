@@ -316,6 +316,14 @@ function playCheckers() {
     Board.clear();
   });
 
+  //back to main menu
+  $("#main-menu").on("click", () => {
+        console.log("clicked")
+
+        document.getElementById("game-area").innerHTML = initGamePanel;
+        playCheckers();
+    })
+
   //move piece when tile is clicked
   $('.tile').on("click", function () {
     //make sure a piece is selected

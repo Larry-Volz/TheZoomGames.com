@@ -19,13 +19,17 @@ body {
     font-size: .7rem;
 }
 
-#jeopardy-table td {
+.jeop-table td, .jeop-thead {
     color: yellow;
     font-size: .8rem;
     text-align: center;
     width: 16%;
 }
 
+.jeop-thead, .jeop-th {
+    font-weight: bold;
+    font-size: .9rem;
+}
 .modal:nth-of-type(even) {
     z-index: 1052 !important;
 }
@@ -34,6 +38,6 @@ body {
 }
 
 
-  td, .point-btn, .player-btn {
+ .jeop-table td, .point-btn, .player-btn {
     cursor: pointer;
   }
