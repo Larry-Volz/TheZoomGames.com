@@ -1,6 +1,6 @@
 /**
 
-DONE: When the user clicks the “Restart” button at the bottom of the page, it should load new categories and questions.
+DONE: When the user clicks the “Restart” button at the bottom of the page, it should load new categories and questions but not refresh the page so it is modular for theZoomGames project.
 
 DONE: try-catch block in case can't connect. 
 
@@ -81,6 +81,7 @@ let getRND = () => Math.floor(Math.random()*18430);
 
 getQuestions();
 
+// FUNCTION TO START ANOTHER GAME
 $("#reload").on("click", ()=> {
         
     clearBoard();
@@ -161,7 +162,7 @@ async function getQuestions() {
 
     fillBoard(categories);
 
-    gameLoop(categories);
+    gameLoop();
 
     // playAgain(); //removing at Bhavya's recommendation as it was redundant
 }
@@ -214,6 +215,9 @@ function fillBoard(categories){
 function clearBoard(){
     let scr="...";
 
+    //THIS SAVES A LOT OF PAIN!!!
+    categories = [];
+
     $(`#cat0`).html('<img src="images/Spinner-1s-200px.gif" id="spinner">');
     $(`#cat1`).text("GETTING QUESTIONS");
 
@@ -234,7 +238,7 @@ function clearBoard(){
     }; //end of clearBoard()
 
 
- function gameLoop(categories){
+ function gameLoop(){
     let $id, colId, colText, $rowId, cell, cellText, q, a, v;
     let [p1Score, p2Score, p3Score, p4Score] = [0,0,0,0];
    
