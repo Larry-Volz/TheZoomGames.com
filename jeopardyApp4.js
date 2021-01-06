@@ -81,7 +81,18 @@ let getRND = () => Math.floor(Math.random()*18430);
 
 getQuestions();
 
+$("#reload").on("click", ()=> {
+        
+    clearBoard();
+    // setTimeout(()=>{
+        
+    // },500);
 
+    getQuestions()
+    .then(()=>{fillBoard(categories)})
+    .then(()=>{gameLoop(categories)})
+    
+});
 
 
 
@@ -152,7 +163,7 @@ async function getQuestions() {
 
     gameLoop(categories);
 
-    playAgain();
+    // playAgain(); //removing at Bhavya's recommendation as it was redundant
 }
 
 $(`#cat0`).html('<img src="images/Spinner-1s-200px.gif" id="spinner">');
@@ -231,8 +242,8 @@ function clearBoard(){
 
     //put event listeners on all the td's
     $(".table").on("click", (evt) => {
-
         let targetName = evt.target.nodeName;
+        
         //don't react to table headings
         if (targetName != "TH"){
 
@@ -349,21 +360,22 @@ function isGameOver(){
     //Check to see if all questions are answered
 }
 
-function playAgain(){
-    // $("#reload").on("click", ()=> location.reload())
-    $("#reload").on("click", ()=> {
+//functionality taken out of a function at Bhavya's suggestion
+// function playAgain(){
+//     // $("#reload").on("click", ()=> location.reload())
+//     $("#reload").on("click", ()=> {
         
-        clearBoard();
-        // setTimeout(()=>{
+//         clearBoard();
+//         // setTimeout(()=>{
             
-        // },500);
+//         // },500);
 
-        getQuestions()
-        .then(()=>{fillBoard(categories)})
-        .then(()=>{gameLoop(categories)})
+//         getQuestions()
+//         .then(()=>{fillBoard(categories)})
+//         .then(()=>{gameLoop(categories)})
         
-    });
-}
+//     });
+// }
 
 
 
