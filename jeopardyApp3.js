@@ -94,13 +94,6 @@ let getRND = () => Math.floor(Math.random()*18430);
 // getQuestions();
 
 
-$(`#cat0`).html('<img src="images/Spinner-1s-200px.gif" id="spinner">');
-$(`#cat1`).text("GETTING QUESTIONS");
-
-
-
-
-
 
 
 async function getQuestions() {
@@ -108,6 +101,9 @@ async function getQuestions() {
 
     let validCategories = 0;
     let failureFlag = false;
+
+    $(`#cat0`).html('<img src="images/Spinner-1s-200px.gif" id="spinner">');
+    $(`#cat1`).text("GETTING QUESTIONS");
     
     do{
 
@@ -496,6 +492,9 @@ $("#reload").on("click", ()=> {
 }
 
 function clearBoard(){
+
+    $(`#cat0`).html('<img src="images/Spinner-1s-200px.gif" id="spinner">');
+    $(`#cat1`).text("GETTING QUESTIONS");
 
     //THIS SAVES A LOT OF PAIN!!!
     categories = {};
