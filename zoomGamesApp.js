@@ -222,144 +222,25 @@ const jeopardyModule = `
             </div>
         </div>
         <div class="row justify-content-center">
-            <button class = " btn btn-info border rounded mt-5" id = "reload">Restart Game</button>
-        </div>
-    </div>
-    
-        <!-- Modal -->
-    <div class="modal fade bg-dark" id="qModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header ">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+            <div class="col-5">
+                <button class = " btn btn-info border rounded mt-2" id = "reload" name="reload">Play Again?</button>
             </div>
-            <div id="qDisplay" class="modal-body">
-            ...
-            </div>
-            <div class="modal-footer">
-            <button id = "getAnswer" type="button" class="btn btn-success" data-dismiss="modal">Answer</button>
+            <div class ="col-5">
+                <button class = "btn btn-success border rounded mt-2" id="main-menu" >Main Menu</button>
             </div>
         </div>
-        </div>
+        
     </div>
-
-    <div class="modal fade" id="aModal"  data-backdrop = "false" tabindex="-1" role="dialog"  aria-hidden="true">
-        <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header ">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>
-            <div id="aDisplay" class="modal-body">
-            ...
-            </div>
-            <div class="modal-footer">
-            <button id = "getAnswer" type="button" class="btn btn-success" data-dismiss="modal">Done</button>
-            </div>
-        </div>
-        </div>
-    </div>
-`;
-
-const connect4Module = `<div class="container">
-<div class="row justify-content-center text-center mt-2">
-  <div id="titleGradient">
-   <h1 id="c4-h1">Connectix</h1>
-  </div>
-</div>
-<div class="row justify-content-center text-center">
-  <div class = "note">*It's just like "Connect Four" but more fun to say</div><br><br>
-</div>
-<div id = "vanish-me" class="row justify-content-center text-center">
-  <div id="player-options">
-    <form class = "form" action="#" id="player-form">
-      <label for = "player1-color">Player 1 pick a color</label>
-        <select id="player1-color" name = "player1-color">
-          <option value="sunrise" selected>sunrise</option>
-          <option value="peach">peach</option>
-          <option value="pink-rose">pink rose</option>
-          <option value="mauve">mauve</option>
-        </select>
-        <br>
-      <label for = "player2-color">Player 2 pick a color</label>
-        <select id="player2-color" name = "player2-color">
-          <option value="lime">lime</option>
-          <option value="frost">frost</option>
-          <option value="purples" selected>purples</option>
-          <option value="greys">greys</option>
-        </select>
-        <br>
-      <label for = "num-cols"># of columns</label>
-        <select id="num-cols" name = "num-cols">
-          <option value=6>6</option>
-          <option value=7>7</option>
-          <option value=8>8</option>
-          <option value=9>9</option>
-          <option value=10>10</option>
-          <option value=11>11</option>
-          <option value=11>12</option>
-        </select>
-        <br>
-      <label for = "num-rows"># of rows</label>
-        <select id="num-rows" name = "num-rows">
-          <option value=6>6</option>
-          <option value=7>7</option>
-          <option value=8>8</option>
-          <option value=9>9</option>
-          <option value=10>10</option>
-          <option value=11>11</option>
-          <option value=11>12</option>
-        </select> 
-        <br><br>
-        <button class = "btn btn-primary" id="play-btn">PLAY!</button>
-    </form>
-    <br>
-  </div>
-</div>
-<div class = "row justify-content-center text-center">
-  <div id="game">
-    <table id="c4-board" style = "display: none;"></table>
-  </div>
-</div>
-<div class = "row justify-content-center text-center">
-  <div>
-  <span class = "instructions"><br>Take turns.<br>Click the top row to drop a piece.
-  <br>First to connect 4 wins!</span></div> 
-</div>
-</div>`;
-
-const checkersModule = `
-<div class="row justify-content-center">
-    <h3 class=" text text-light text-center">Red goes first - jumps are mandatory</h3>
-</div>
-<div class="row justify-content-center">
-    <div class="column">
-        <div id="board">
-        <div class="tiles"></div>
-        <div class="pieces">
-            <div class="player1pieces">
-            </div>
-            <div class="player2pieces">
-            </div>
-        </div>
-    </div>
-</div>
-<div class = "row justify-content-center">
-    <div class ="col-5">
-        <button id="cleargame" class = "btn btn-primary mt-2">Reset Game</button>
-    </div>
-    <div class ="col-5">
-        <button id="main-menu" class = "btn btn-success mt-2">Main Menu</button>
-    </div>
-</div>
-
 `
 
 window.onload = function() {
     console.log("updated zoomGamesApp.js connected")
+
+//TO PREVENT PAGE RELOAD 
+//TODO: Find a better solution! ???
+window.onbeforeunload = function(event) {
+    event.returnValue = "Write something clever here..";
+  };
 
     $("#jeopardy-game").on("click", () => {
         console.log("clicked")
