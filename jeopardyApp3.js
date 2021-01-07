@@ -180,7 +180,7 @@ function insertSql(categories) {
     const catArr = Object.keys(categories);
 
     //BRUTE FORCE PROGRAMMING UNTIL I CAN LEARN THE PROPER PHP SYNTAX TO DO IT IN A LOOP OR PASS ARRAYS
-
+    //LEARN/USE HTML5 WEBSOCKETS
     $.post(
         'sql_initial_insert.php', 
         {
