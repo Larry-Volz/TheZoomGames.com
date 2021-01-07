@@ -98,31 +98,18 @@ $(`#cat0`).html('<img src="images/Spinner-1s-200px.gif" id="spinner">');
 $(`#cat1`).text("GETTING QUESTIONS");
 
 
-// FUNCTION TO START ANOTHER GAME
-$("#reload").on("click", ()=> {
-        
-    clearBoard();
-    // setTimeout(()=>{
-        
-    // },500);
 
-    getQuestions()
-    .then(()=>{fillBoard(categories)})
-    .then(()=>{gameLoop(categories)})
-    
-});
 
 
 
 
 async function getQuestions() {
-    let vAbbrev, aAbbrev, qAbbrev;
     let v, a, q;
 
     let validCategories = 0;
     let failureFlag = false;
     
-        do{
+    do{
 
         url = `https://jservice.io/api/category?id=${getRND()}`
         apiResponse = await axios.get(url)
@@ -170,7 +157,7 @@ async function getQuestions() {
                 } else {
                     //reset counter/start over until we get 6 complete columns
                     validCategories = 0;
-                    categories = [];
+                    categories = {};
                     failureFlag = 0;
                 }
             })
@@ -184,7 +171,7 @@ async function getQuestions() {
 
     insertSql(categories);
 
-    gameLoop(categories);
+    gameLoop();
 
     playAgain();
 }
@@ -491,7 +478,21 @@ function isGameOver(){
 }
 
 function playAgain(){
-    $("#reload").on("click", ()=> location.reload())
+    // $("#reload").on("click", ()=> location.reload())
+
+    // FUNCTION TO START ANOTHER GAME
+$("#reload").on("click", ()=> {
+        
+    clearBoard();
+    // setTimeout(()=>{
+        
+    // },500);
+
+    getQuestions()
+    .then(()=>{fillBoard(categories)})
+    .then(()=>{gameLoop(categories)})
+    
+});
 }
 
 function clearBoard(){

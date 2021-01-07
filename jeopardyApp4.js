@@ -99,7 +99,6 @@ $(`#cat0`).html('<img src="images/Spinner-1s-200px.gif" id="spinner">');
 $(`#cat1`).text("GETTING QUESTIONS");
 
 async function getQuestions() { 
-    let vAbbrev, aAbbrev, qAbbrev;
     let v, a, q;  //value answer questions
 
     let validCategories = 0;
