@@ -77,7 +77,7 @@ let categories = {};
 let qArray = [];
 let getRND = () => Math.floor(Math.random()*18430);
 
-
+alert("jeopardyApp4 connected");
 
 getQuestions();
 
@@ -95,7 +95,8 @@ $("#reload").on("click", ()=> {
     
 });
 
-
+$(`#cat0`).html('<img src="images/Spinner-1s-200px.gif" id="spinner">');
+$(`#cat1`).text("GETTING QUESTIONS");
 
 async function getQuestions() { 
     let vAbbrev, aAbbrev, qAbbrev;
@@ -149,7 +150,7 @@ async function getQuestions() {
                 } else {
                     //reset counter/start over until we get 6 complete columns
                     validCategories = 0;
-                    categories = [];
+                    categories = {};
                     failureFlag = 0;
                 }
         
@@ -167,8 +168,7 @@ async function getQuestions() {
     // playAgain(); //removing at Bhavya's recommendation as it was redundant
 }
 
-$(`#cat0`).html('<img src="images/Spinner-1s-200px.gif" id="spinner">');
-$(`#cat1`).text("GETTING QUESTIONS");
+
 
 function fillBoard(categories){
     let scr;
@@ -213,10 +213,9 @@ function fillBoard(categories){
 
 
 function clearBoard(){
-    let scr="...";
 
     //THIS SAVES A LOT OF PAIN!!!
-    categories = [];
+    categories = {};
 
     $(`#cat0`).html('<img src="images/Spinner-1s-200px.gif" id="spinner">');
     $(`#cat1`).text("GETTING QUESTIONS");

@@ -90,6 +90,27 @@ let categories = {};
 let qArray = [];
 let getRND = () => Math.floor(Math.random()*18430);
 
+//REMOVE FOR USE IN THEZOOMGAMES:
+// getQuestions();
+
+
+$(`#cat0`).html('<img src="images/Spinner-1s-200px.gif" id="spinner">');
+$(`#cat1`).text("GETTING QUESTIONS");
+
+
+// FUNCTION TO START ANOTHER GAME
+$("#reload").on("click", ()=> {
+        
+    clearBoard();
+    // setTimeout(()=>{
+        
+    // },500);
+
+    getQuestions()
+    .then(()=>{fillBoard(categories)})
+    .then(()=>{gameLoop(categories)})
+    
+});
 
 
 
@@ -345,63 +366,66 @@ function fillBoard(categories){
 }
 
 
- function gameLoop(categories){
+ function gameLoop(){
     let $id, colId, colText, $rowId, cell, cellText, q, a, v;
-    let p1Score = 0;
-    let p2Score = 0;
-    let p3Score = 0;
+    let [p1Score, p2Score, p3Score, p4Score] = [0,0,0,0];
     let boardCellCount = 0;
 
     //put event listeners on all the td's
    
     $(".table").on("click", (evt) => {
+
+    let targetName = evt.target.nodeName;
+    
+    //don't react to table headings
+    if (targetName != "TH"){
         $id = $(evt.target).attr('id');
 
-     colId = `cat${$id.slice(1)}`; 
-     colText = document.getElementById(colId).innerText;
-     $rowId = $id.slice(0,1);
+        colId = `cat${$id.slice(1)}`; 
+        colText = document.getElementById(colId).innerText;
+        $rowId = $id.slice(0,1);
+        
+        cell = document.getElementById($id);
+        cellText = cell.innerText;
+
+        q = categories[colText][$rowId]["question"];
+        a = categories[colText][$rowId]["answer"];
+        v = parseInt(categories[colText][$rowId]["value"]);
+
+        //TODO: check a for <i> and </i> and remove them
+        
     
-    cell = document.getElementById($id);
-    cellText = cell.innerText;
+        //is the board cell == v?
+        ////console.log(`cellText: ${cellText} v: ${v} \nq: ${q}\na: ${a}`);
+        if (parseInt(cellText) == v){
+            // cell.innerHTML = q;
+            document.getElementById("qDisplay").innerText = q;
+            document.getElementById("aDisplay").innerText = a;
 
-    q = categories[colText][$rowId]["question"];
-    a = categories[colText][$rowId]["answer"];
-    v = parseInt(categories[colText][$rowId]["value"]);
+            $('#qModal').modal('show');
+            $('#aModal').modal('show');
 
-    //TODO: check a for <i> and </i> and remove them
+
+            setTimeout(()=>{
+                cell.style.fontSize = "xx-small;"
+                cell.innerHTML = a;
+            }, 1000);
+            
+            
+            // cell.classList.add("text-primary");
+            
+
+            
     
-  
-    //is the board cell == v?
-    ////console.log(`cellText: ${cellText} v: ${v} \nq: ${q}\na: ${a}`);
-    if (parseInt(cellText) == v){
-        // cell.innerHTML = q;
-        document.getElementById("qDisplay").innerText = q;
-        document.getElementById("aDisplay").innerText = a;
+        } 
+        //else if (cellText == q){
+        //     cell.innerHTML = a;
+        // }
 
-        $('#qModal').modal('show');
-        $('#aModal').modal('show');
-
-
-         setTimeout(()=>{
-             cell.style.fontSize = "xx-small;"
-             cell.innerHTML = a;
-         }, 1000);
-        
-        
-        // cell.classList.add("text-primary");
-        
-
-        
-   
-     } 
-     //else if (cellText == q){
-    //     cell.innerHTML = a;
-    // }
-
-    $('#qModal').on('hidden.bs.modal', function (e) {
-        document.getElementById("qDisplay").innerText = "";
-      })
-
+        $('#qModal').on('hidden.bs.modal', function (e) {
+            document.getElementById("qDisplay").innerText = "";
+        })
+    }
     // $("#getAnswer").on("click", (cell, a) => {
     //     console.log(`cell: ${cell},  a: ${a}`);
     //     cell.innerHTML = a;
@@ -447,7 +471,7 @@ function fillBoard(categories){
         p4Score += v;
         $("#p4-score").text(p4Score);
         v=0
-        cell.classList.add("bg-danger");
+        cell.classList.add("bg-info");
         cell.classList.add("text-light");
     });
 
@@ -470,6 +494,27 @@ function playAgain(){
     $("#reload").on("click", ()=> location.reload())
 }
 
+function clearBoard(){
+
+    //THIS SAVES A LOT OF PAIN!!!
+    categories = {};
+
+
+    for (let k=2; k<6; k++){
+        //cat0 - cat5 are the header cells
+        // console.log(`#cat${i}`)
+        $(`#cat${k}`).text("");
+        // console.log(document.getElementById(`cat${i}`).innerText) // = "";
+    }
+
+    for (let j = 0; j <5; j ++){
+        for (let k=0; k< 6;k++){
+            $(`#${j}${k}`).text("")
+            .removeClass("bg-warning bg-danger bg-success bg-info")
+        }
+    }
+
+    }; //end of clearBoard()
 
 
 // function processApiResponse(apiResponse){
